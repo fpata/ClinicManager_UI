@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Clinic Manager UI</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+  <app-root></app-root>
+  <!-- Global confirm modal used by showConfirm helper -->
+  <div class="modal fade" id="globalConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>Confirm</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p id="globalConfirmMessage">Are you sure?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="globalConfirmCancel">Cancel</button>
+          <button type="button" class="btn btn-danger" id="globalConfirmOk">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Provide a global showConfirm(message) -> Promise<boolean>
+    (function () {
+      function showConfirm(message) {
+        return new Promise(function (resolve) {
+          try {
+            var modalEl = document.getElementById('globalConfirmModal');
+            var msgEl = document.getElementById('globalConfirmMessage');
+            var ok = document.getElementById('globalConfirmOk');
+            var cancel = document.getElementById('globalConfirmCancel');
+            if (!modalEl || !msgEl || !ok || !cancel || !(window.bootstrap)) {
+              // Fallback to native confirm
+              resolve(window.confirm(message));
+              return;
+            }
+            msgEl.textContent = message;
+            var modal = new window.bootstrap.Modal(modalEl);
+            var cleaned = false;
+            var cleanup = function (result) {
+              if (cleaned) return;
+              cleaned = true;
+              try { ok.removeEventListener('click', onOk); } catch (e) {}
+              try { cancel.removeEventListener('click', onCancel); } catch (e) {}
+              try { modal.hide(); } catch (e) {}
+              resolve(result);
+            };
+            var onOk = function () { cleanup(true); };
+            var onCancel = function () { cleanup(false); };
+            ok.addEventListener('click', onOk);
+            cancel.addEventListener('click', onCancel);
+            modal.show();
+          } catch (e) {
+            resolve(window.confirm(message));
+          }
+        });
+      }
+      (window).showConfirm = showConfirm;
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<div class="container-fluid">
+  <form class="was-validated">
+    <!-- Header row -->
+    <div class="row mb-3 align-items-center text-center">
+      <div class="col">
+        <h5 class="mb-0">Patient Search</h5>
+      </div>
+      <div class="col-auto text-end text-muted">
+        {{ this.user?.FirstName + ' ' + this.user?.LastName }}
+      </div>
+    </div>
+
+    <!-- Patient Search Component -->
+    <div class="row">
+      <div class="col-12">
+        <app-patient-search></app-patient-search>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col text-center">
+        <button type="button" class="btn btn-primary me-2" (click)="onSave()">Save</button>
+        <button type="button" class="btn btn-secondary me-2" (click)="onClear()">Clear</button>
+        <button type="button" class="btn btn-danger" (click)="onDelete()">Delete</button>
+      </div>
+    </div>
+  </form>
+</div>

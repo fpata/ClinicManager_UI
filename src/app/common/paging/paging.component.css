@@ -1,0 +1,16 @@
+/* Ensure Bootstrap pagination looks good and is centered */
+.pagination {
+	margin: 0;
+}
+.page-item.disabled .page-link {
+	pointer-events: none;
+	color: #6c757d;
+	background-color: #fff;
+	border-color: #dee2e6;
+}
+.page-item.active .page-link {
+	z-index: 2;
+	color: #fff;
+	background-color: #007bff;
+	border-color: #007bff;
+}

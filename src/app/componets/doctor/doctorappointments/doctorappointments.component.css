@@ -1,0 +1,668 @@
+/* ============================================
+   Page Container & Header Styling
+   ============================================ */
+
+.page-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #f0f3f7 100%);
+  padding: 2rem 0;
+}
+
+.page-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 3rem 2rem;
+  border-radius: 0 0 1.5rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  margin-bottom: 2rem;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.page-subtitle {
+  font-size: 1rem;
+  opacity: 0.95;
+  font-weight: 300;
+  letter-spacing: 0.3px;
+}
+
+/* ============================================
+   Search Form Section
+   ============================================ */
+
+.search-form-container {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+}
+
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ============================================
+   Accordion Styling
+   ============================================ */
+
+.accordion-modern {
+  border: 1px solid #e9ecef;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.accordion-item {
+  border: none;
+  margin-bottom: 0;
+}
+
+.accordion-button {
+  background-color: white;
+  color: #2c3e50;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 1.25rem 1.5rem;
+  border: none;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.accordion-button:not(.collapsed) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+}
+
+.accordion-button:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.accordion-button::after {
+  transition: transform 0.3s ease;
+}
+
+.accordion-button:not(.collapsed)::after {
+  transform: rotate(-180deg);
+}
+
+.accordion-title {
+  flex: 1;
+  margin: 0;
+}
+
+.accordion-badge {
+  font-size: 0.85rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 20px;
+}
+
+.accordion-body {
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+}
+
+/* ============================================
+   Search Results Section
+   ============================================ */
+
+.search-results {
+  margin-top: 2rem;
+}
+
+.results-header {
+  padding: 1.25rem;
+  background: white;
+  border-radius: 0.75rem;
+  border-left: 4px solid #667eea;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.results-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.results-header .badge {
+  font-size: 0.95rem;
+  padding: 0.5rem 0.75rem;
+}
+
+/* ============================================
+   Table Styling
+   ============================================ */
+
+.table-view {
+  background: white;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.results-table {
+  margin: 0;
+}
+
+.results-table thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.results-table thead th {
+  border: none;
+  font-weight: 600;
+  padding: 1rem 0.75rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  vertical-align: middle;
+}
+
+.results-table tbody tr {
+  border-bottom: 1px solid #e9ecef;
+  transition: all 0.2s ease;
+}
+
+.results-table tbody tr:hover {
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.results-table tbody td {
+  padding: 0.875rem 0.75rem;
+  vertical-align: middle;
+  font-size: 0.95rem;
+}
+
+.results-table tbody td.fw-medium {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.link-email,
+.link-phone {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.link-email:hover,
+.link-phone:hover {
+  color: #764ba2;
+  text-decoration: underline;
+}
+
+.table-row-hover:hover {
+  background-color: rgba(102, 126, 234, 0.05) !important;
+}
+
+/* ============================================
+   Mobile Cards View
+   ============================================ */
+
+.cards-view {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.result-card {
+  background: white;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border-left: 4px solid #667eea;
+}
+
+.result-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.card-header-custom {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem;
+}
+
+.card-header-custom h6 {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.card-header-custom .badge {
+  font-size: 0.8rem;
+  padding: 0.35rem 0.6rem;
+}
+
+.action-buttons-mobile {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.card-body-custom {
+  padding: 1rem;
+  background-color: #f8f9fa;
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #667eea;
+  min-width: 80px;
+  font-size: 0.9rem;
+}
+
+.info-value {
+  color: #2c3e50;
+  font-size: 0.9rem;
+  flex: 1;
+  word-break: break-word;
+}
+
+/* ============================================
+   Empty State
+   ============================================ */
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: #999;
+}
+
+.empty-state i {
+  font-size: 2.5rem;
+  color: #ddd;
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 1rem;
+  color: #666;
+}
+
+/* ============================================
+   Pagination Container
+   ============================================ */
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================
+   Scheduler Specific Styling
+   ============================================ */
+
+.scheduler-container {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.scheduler-wrapper {
+  background: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+/* ============================================
+   Modal Form Styling
+   ============================================ */
+
+.modal-content {
+  border-radius: 1rem;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.25rem 1.5rem;
+  border-bottom: none;
+}
+
+.modal-header .btn-close {
+  filter: invert(1) grayscale(1) brightness(2);
+}
+
+.modal-title {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+}
+
+.modal-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  padding: 1rem 1.5rem;
+}
+
+.modal-form .form-group {
+  margin-bottom: 1.25rem;
+}
+
+.modal-form .form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+/* Large screens (991px and up) */
+@media (min-width: 992px) {
+  .page-header {
+    padding: 3.5rem 2rem;
+  }
+
+  .page-title {
+    font-size: 2.2rem;
+  }
+
+  .page-subtitle {
+    font-size: 1.05rem;
+  }
+
+  .accordion-button {
+    padding: 1.35rem 1.75rem;
+  }
+
+  .results-table thead th {
+    padding: 1.1rem 0.9rem;
+  }
+
+  .results-table tbody td {
+    padding: 0.95rem 0.9rem;
+  }
+}
+
+/* Medium screens (768px - 991px) */
+@media (max-width: 991px) {
+  .page-header {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .page-title {
+    font-size: 1.7rem;
+  }
+
+  .page-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .accordion-button {
+    padding: 1rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .accordion-badge {
+    font-size: 0.8rem;
+  }
+
+  .results-table {
+    font-size: 0.9rem;
+  }
+
+  .results-table thead th {
+    padding: 0.85rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .results-table tbody td {
+    padding: 0.75rem 0.6rem;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+  }
+}
+
+/* Small screens (576px - 768px) */
+@media (max-width: 767px) {
+  .page-container {
+    padding: 1rem 0;
+  }
+
+  .page-header {
+    padding: 2rem 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .page-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .search-form-container {
+    padding: 1rem;
+  }
+
+  .accordion-button {
+    padding: 0.9rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .results-header {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .results-title {
+    font-size: 1rem;
+  }
+
+  .results-header .badge {
+    font-size: 0.85rem;
+  }
+
+  .card-header-custom {
+    padding: 0.85rem;
+  }
+
+  .card-header-custom h6 {
+    font-size: 0.95rem;
+  }
+
+  .card-body-custom {
+    padding: 0.85rem;
+  }
+
+  .info-label {
+    min-width: 70px;
+  }
+
+  .action-buttons-mobile {
+    gap: 0.35rem;
+  }
+
+  .btn-sm {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Extra small screens (below 576px) */
+@media (max-width: 575px) {
+  .page-header {
+    padding: 1.5rem 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .page-title {
+    font-size: 1.3rem;
+  }
+
+  .page-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .search-form-container {
+    padding: 0.75rem;
+  }
+
+  .accordion-button {
+    padding: 0.8rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .accordion-badge {
+    font-size: 0.75rem;
+    display: none;
+  }
+
+  .results-header {
+    padding: 0.85rem;
+  }
+
+  .results-title {
+    font-size: 0.95rem;
+  }
+
+  .card-header-custom {
+    padding: 0.75rem;
+  }
+
+  .card-body-custom {
+    padding: 0.75rem;
+  }
+
+  .info-row {
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .info-label {
+    min-width: 60px;
+    font-size: 0.85rem;
+  }
+
+  .info-value {
+    font-size: 0.85rem;
+  }
+
+  .action-buttons-mobile {
+    gap: 0.25rem;
+  }
+
+  .btn-sm {
+    padding: 0.3rem 0.4rem;
+    font-size: 0.75rem;
+  }
+
+  .pagination-container {
+    padding: 1rem 0.5rem;
+  }
+}
+
+/* ============================================
+   Animation
+   ============================================ */
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-card {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* ============================================
+   Button Styling (Additional)
+   ============================================ */
+
+.btn-outline-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+}
+
+.btn-outline-success:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+}
+
+.btn-outline-danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+}
+
+/* ============================================
+   Alert Styling
+   ============================================ */
+
+.alert {
+  border-radius: 0.75rem;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}

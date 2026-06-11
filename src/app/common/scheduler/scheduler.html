@@ -1,0 +1,29 @@
+<div class="scheduler-container">
+
+   
+  <div class="view-controls">
+    <button class="btn btn-secondary" id="btnDayView" (click)="switchToDayView()" type="button">Day</button>
+    <button class="btn btn-secondary" id="btnWeekView" (click)="switchToWeekView()" type="button">Week</button>
+    @if(this.config.days === 6 || this.config.days === 7) {
+    <div class="scheduler-controls">
+      <button class="btn btn-primary" id="btnPreviousWeek" (click)="navigateToPreviousWeek()" type="button">← Previous Week</button> &nbsp;&nbsp;
+      <button class="btn btn-primary" id="btnToday" (click)="navigateToToday()" type="button">Today</button>&nbsp;&nbsp;
+      <button class="btn btn-primary" id="btnNextWeek" (click)="navigateToNextWeek()" type="button">Next Week →</button>&nbsp;&nbsp;
+
+    </div>
+  }
+  @if(this.config.days === 1) {
+    <div class="scheduler-controls">
+      <button class="btn btn-primary" id="btnPreviousDay" (click)="navigateToPreviousDay()" type="button">← Previous Day</button> &nbsp;&nbsp;
+      <button class="btn btn-primary" id="btnToday" (click)="navigateToToday()" type="button">Today</button>&nbsp;&nbsp;
+      <button class="btn btn-primary" id="btnNextDay" (click)="navigateToNextDay()" type="button">Next Day →</button>&nbsp;&nbsp;
+    </div>
+    <!--<button class="btn btn-success" (click)="addAppointment()" type="button">Add Appointment</button>&nbsp;&nbsp;-->
+  }
+  </div>
+
+  <div class="scheduler-wrapper">
+    <daypilot-calendar #calendar [config]="config">
+    </daypilot-calendar>
+  </div>
+</div>

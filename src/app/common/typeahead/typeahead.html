@@ -1,0 +1,38 @@
+<div class="position-relative">
+  <input
+    type="text"
+    class="form-control"
+    [placeholder]="placeholder"
+    [disabled]="disabled"
+    [value]="query()"
+    (input)="onInput($event)"
+    (keydown)="onKey($event)"
+    autocomplete="off"
+  />    
+
+  <ul
+    class="list-group position-absolute w-100 mt-1 shadow"
+    *ngIf="isOpen()"
+    style="z-index:1000; max-height:240px; overflow-y:auto;">
+    <li *ngIf="loading()" class="list-group-item text-muted small">
+      Loading...
+    </li>
+
+    <li *ngIf="!loading() && serverError()" class="list-group-item text-danger small">
+      {{ serverError() }}
+    </li>
+
+    <li
+      class="list-group-item list-group-item-action"
+      *ngFor="let item of filtered(); let i = index; trackBy: trackByIndex"
+      [class.active]="i === focusedIndex()"
+      (mousedown)="onItemMouseDown($event, item)"
+      (mouseenter)="focusedIndex.set(i)"
+    >
+      {{ displayWith(item) }}
+    </li>
+    <li *ngIf="!loading() && !serverError() && !filtered().length" class="list-group-item text-muted small">
+      No results
+    </li>
+  </ul>
+</div>

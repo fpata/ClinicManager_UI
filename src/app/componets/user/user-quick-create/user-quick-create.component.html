@@ -1,0 +1,221 @@
+<div class="page-container">
+  <div class="page-header mb-4">
+    <div class="header-content">
+      <h1 class="page-title mb-1">
+        <i class="bi bi-person-circle me-2"></i>Quick Create User
+      </h1>
+      <p class="page-subtitle">Quickly add a new user</p>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <form #quickForm="ngForm" [ngClass]="{'was-validated': formSubmitted}" novalidate class="app-form">
+      <div class="accordion accordion-modern" id="accQuickCreateUser">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accUserPersonalInfo"
+              aria-expanded="true" aria-controls="accUserPersonalInfo">
+              <i class="bi bi-person-check-fill me-2"></i>
+              <span class="accordion-title">Personal Information</span>
+            </button>
+          </h2>
+          <div id="accUserPersonalInfo" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+              <div class="form-section">
+                <!-- User Information -->
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="firstName" class="form-label">First Name <span class="required-star">*</span></label>
+                      <input type="text" class="form-control form-control-lg" id="firstName" name="firstName"
+                        placeholder="First Name" [ngModel]="user?.FirstName" (ngModelChange)="user.FirstName = $event" required>
+                      <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="lastName" class="form-label">Last Name <span class="required-star">*</span></label>
+                      <input type="text" class="form-control form-control-lg" id="lastName" name="lastName"
+                        placeholder="Last Name" [ngModel]="user?.LastName" (ngModelChange)="user.LastName = $event" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="userName" class="form-label">Username <span class="required-star">*</span></label>
+                      <input type="text" class="form-control form-control-lg" id="userName" name="userName"
+                        placeholder="Username" [ngModel]="user?.UserName" (ngModelChange)="user.UserName = $event" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="password" class="form-label">Password <span class="required-star">*</span></label>
+                      <input type="password" class="form-control form-control-lg" id="password" name="password"
+                        placeholder="Password" [ngModel]="user?.Password" (ngModelChange)="user.Password = $event" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="userType" class="form-label">User Type <span class="required-star">*</span></label>
+                      <select class="form-select form-select-lg" id="userType" name="userType" [ngModel]="user?.UserType"
+                        (ngModelChange)="onUserTypeChange($event)" required>
+                        <option value="">-- Select User Type --</option>
+                        <option value="1">Patient</option>
+                        <option value="2">Doctor</option>
+                        <option value="3">Nurse</option>
+                        <option value="4">Receptionist</option>
+                        <option value="5">Administrator</option>
+                        <option value="6">Technician</option>
+                        <option value="7">Accountant</option>
+                        <option value="8">Dental Assistant</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="form-label">Gender</label>
+                      <div class="gender-group">
+                        <div class="form-check form-check-inline">
+                          <input type="radio" id="rdGenderMale1" name="gender" class="form-check-input" value="1"
+                            [checked]="user?.Gender === 1" (change)="user && (user.Gender = 1)">
+                          <label class="form-check-label" for="rdGenderMale1">Male</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input type="radio" id="rdGenderFemale1" name="gender" class="form-check-input" value="2"
+                            [checked]="user?.Gender === 2" (change)="user && (user.Gender = 2)">
+                          <label class="form-check-label" for="rdGenderFemale1">Female</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input type="radio" id="rdGenderOther1" name="gender" class="form-check-input" value="3"
+                            [checked]="user?.Gender === 3" (change)="user && (user.Gender = 3)">
+                          <label class="form-check-label" for="rdGenderOther1">Other</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accUserAddress"
+              aria-expanded="false" aria-controls="accUserAddress">
+              <i class="bi bi-house-door me-2"></i>
+              <span class="accordion-title">Address Information</span>
+            </button>
+          </h2>
+          <div id="accUserAddress" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+              <div class="form-section">
+                <div class="row g-3 mb-3">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="address1" class="form-label">Address Line 1 <span class="required-star">*</span></label>
+                      <input type="text" class="form-control form-control-lg" id="address1" name="address1"
+                        placeholder="Address Line 1" [ngModel]="user?.Address?.PermAddress1" (ngModelChange)="user.Address.PermAddress1 = $event" required>
+                      <div class="invalid-feedback">Please provide a primary address.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="city" class="form-label">City <span class="required-star">*</span></label>
+                      <input type="text" class="form-control form-control-lg" id="city" name="city" placeholder="City"
+                        [ngModel]="user?.Address?.PermCity" (ngModelChange)="user.Address.PermCity = $event" required>
+                      <div class="invalid-feedback">Please provide a City.</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="state" class="form-label">State <span class="required-star">*</span></label>
+                      <input type="text" class="form-control form-control-lg" id="state" name="state" placeholder="State"
+                        [ngModel]="user?.Address?.PermState" (ngModelChange)="user.Address.PermState = $event" required>
+                      <div class="invalid-feedback">Please provide a State.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="country" class="form-label">Country <span class="required-star">*</span></label>
+                      <input type="text" class="form-control form-control-lg" id="country" name="country" placeholder="Country"
+                        [ngModel]="user?.Address?.PermCountry" (ngModelChange)="user.Address.PermCountry = $event" required>
+                      <div class="invalid-feedback">Please provide a Country.</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="zipCode" class="form-label">Zip Code <span class="required-star">*</span></label>
+                      <input type="text" class="form-control form-control-lg" id="zipCode" name="zipCode" placeholder="Zip Code"
+                        [ngModel]="user?.Address?.PermZipCode" (ngModelChange)="user.Address.PermZipCode = $event" required>
+                      <div class="invalid-feedback">Please provide a Zip Code.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accUserContact"
+              aria-expanded="false" aria-controls="accUserContact">
+              <i class="bi bi-telephone me-2"></i>
+              <span class="accordion-title">Contact Information</span>
+            </button>
+          </h2>
+          <div id="accUserContact" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+              <div class="form-section">
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="primaryPhone" class="form-label">Primary Phone <span class="required-star">*</span></label>
+                      <input type="tel" class="form-control form-control-lg" id="primaryPhone" name="primaryPhone"
+                        placeholder="Primary Phone" [ngModel]="user?.Contact?.PrimaryPhone" (ngModelChange)="user.Contact.PrimaryPhone = $event" required>
+                      <div class="invalid-feedback">Please provide a primary phone.</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="primaryEmail" class="form-label">Primary Email <span class="required-star">*</span></label>
+                      <input type="email" class="form-control form-control-lg" id="primaryEmail" name="primaryEmail"
+                        placeholder="Primary Email" [ngModel]="user?.Contact?.PrimaryEmail" (ngModelChange)="user.Contact.PrimaryEmail = $event" required email>
+                      <div class="invalid-feedback">Please provide a primary email.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-buttons-section mt-4 mb-4">
+        <div class="button-group d-flex gap-3 flex-wrap">
+          <button type="button" id="btnPatientSave" class="btn btn-lg btn-primary flex-grow-1" (click)="SaveUserInformation()">
+            <i class="bi bi-check-circle me-2"></i>Save
+          </button>
+          <button type="button" id="btnPatientClear" class="btn btn-lg btn-outline-secondary flex-grow-1" (click)="ClearUserInformation()">
+            <i class="bi bi-arrow-counterclockwise me-2"></i>Clear
+          </button>
+          <button type="button" id="btnPatientDelete" class="btn btn-lg btn-outline-danger flex-grow-1" (click)="DeleteUserInformation()">
+            <i class="bi bi-trash me-2"></i>Delete
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

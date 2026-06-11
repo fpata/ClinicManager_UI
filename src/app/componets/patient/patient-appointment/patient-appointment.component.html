@@ -1,0 +1,46 @@
+<div class="page-container">
+  <div class="page-header mb-4 d-flex align-items-center justify-content-between">
+    <div class="header-content">
+      <h1 class="page-title mb-1">
+        <i class="bi bi-calendar-event me-2"></i>Appointments
+      </h1>
+      <p class="page-subtitle">Manage patient appointments and schedule</p>
+    </div>
+    <div class="header-actions text-end">
+      <div class="fw-medium">
+        {{ patient?.user?.FirstName ? (patient.user.FirstName + ' ' + (patient.user.LastName || '')) : (user?.FullName
+        || (user?.FirstName + ' ' + user?.LastName)) }}
+      </div>
+      <div class="text-muted small">ID: {{ patient?.ID || user?.ID || '-' }}</div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="app-form">
+      @if (patient?.ID) {
+      <app-dashboard [patient]="patient" [patientId]="patient?.ID" [patientName]="resolvedPatientName"
+        [isEmbedded]="true">
+      </app-dashboard>
+      }
+
+      <!-- Action Buttons -->
+      @if (!isPatientRole) {
+      <div class="action-buttons-section mt-4 mb-4">
+        <div class="button-group d-flex gap-3 flex-wrap">
+          <button type="button" id="btnAppointmentSave" class="btn btn-lg btn-primary flex-grow-1" (click)="onSave()">
+            <i class="bi bi-check-circle me-2"></i>Save Changes
+          </button>
+          <button type="button" id="btnAppointmentClear" class="btn btn-lg btn-outline-secondary flex-grow-1"
+            (click)="onClear()">
+            <i class="bi bi-arrow-counterclockwise me-2"></i>Clear Form
+          </button>
+          <button type="button" id="btnAppointmentDelete" class="btn btn-lg btn-outline-danger flex-grow-1"
+            (click)="onDelete()">
+            <i class="bi bi-trash me-2"></i>Delete Patient
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>

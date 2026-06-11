@@ -1,0 +1,93 @@
+<div class="page-container">
+  <!-- Page Header -->
+  <div class="page-header mb-4">
+    <div class="header-content">
+      <h1 class="page-title mb-1">
+        <i class="bi bi-wallet2 me-2"></i>Financial Reports
+      </h1>
+      <p class="page-subtitle">Generate revenue logs and outstanding balance audits</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container-fluid">
+    <!-- Accordion 1: Revenue Log Search Criteria -->
+    <div class="accordion accordion-modern mb-3" id="revenueAccordionGroup">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#revenueSearchCollapse"
+            aria-expanded="true" aria-controls="revenueSearchCollapse">
+            <i class="bi bi-cash-stack me-2 text-success"></i>
+            <span class="accordion-title">Revenue & Collections Audit Log</span>
+          </button>
+        </h2>
+        <div id="revenueSearchCollapse" class="accordion-collapse collapse show">
+          <div class="accordion-body">
+            <div class="search-form-container">
+              <form class="search-form">
+                <!-- Date Filters -->
+                <div class="row g-3 mb-4">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="bi bi-calendar me-1"></i>Start Date
+                      </label>
+                      <input type="date" class="form-control form-control-lg" [(ngModel)]="revenueStart" name="revStart">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="bi bi-calendar me-1"></i>End Date
+                      </label>
+                      <input type="date" class="form-control form-control-lg" [(ngModel)]="revenueEnd" name="revEnd">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="button-group d-flex gap-2 flex-wrap">
+                  <button type="button" class="btn btn-lg btn-primary flex-grow-1" [disabled]="isRevenueLoading" (click)="downloadRevenue()">
+                    <span *ngIf="isRevenueLoading" class="spinner-border spinner-border-sm me-2"></span>
+                    <i class="bi bi-download me-2"></i>Download Revenue Report (CSV)
+                  </button>
+                  <button type="button" class="btn btn-lg btn-outline-secondary flex-grow-1" (click)="clearRevenueFilters()">
+                    <i class="bi bi-arrow-counterclockwise me-2"></i>Clear Filters
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accordion 2: Outstanding Balances -->
+    <div class="accordion accordion-modern" id="outstandingAccordionGroup">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#outstandingCollapse"
+            aria-expanded="true" aria-controls="outstandingCollapse">
+            <i class="bi bi-exclamation-triangle me-2 text-warning"></i>
+            <span class="accordion-title">Outstanding Balances (Aging AR) Audit</span>
+          </button>
+        </h2>
+        <div id="outstandingCollapse" class="accordion-collapse collapse show">
+          <div class="accordion-body">
+            <div class="search-form-container">
+              <p class="text-muted mb-4">
+                Lists all patients with active balance dues, invoice summaries, and days outstanding. Generates a spreadsheet for account reconciliation.
+              </p>
+              
+              <button type="button" class="btn btn-lg btn-warning text-dark w-100" [disabled]="isOutstandingLoading" (click)="downloadOutstandingBalances()">
+                <span *ngIf="isOutstandingLoading" class="spinner-border spinner-border-sm me-2"></span>
+                <i class="bi bi-download me-2"></i>Download Aging AR Report (CSV)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

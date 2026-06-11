@@ -1,0 +1,133 @@
+<div class="page-container">
+  <!-- Page Header -->
+  <div class="page-header mb-4">
+    <div class="header-content">
+      <h1 class="page-title mb-1">
+        <i class="bi bi-file-earmark-medical me-2"></i>Clinical Reports
+      </h1>
+      <p class="page-subtitle">Export patient summaries and write specialist referral templates</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container-fluid">
+    <!-- Accordion 1: Medical History -->
+    <div class="accordion accordion-modern mb-3" id="historyAccordionGroup">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#historyCollapse"
+            aria-expanded="true" aria-controls="historyCollapse">
+            <i class="bi bi-file-earmark-person me-2 text-info"></i>
+            <span class="accordion-title">Comprehensive Medical History</span>
+          </button>
+        </h2>
+        <div id="historyCollapse" class="accordion-collapse collapse show">
+          <div class="accordion-body">
+            <div class="search-form-container">
+              <form class="search-form">
+                <!-- Patient Dropdown -->
+                <div class="row g-3 mb-4">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="bi bi-person me-1"></i>Select Patient
+                      </label>
+                      <select class="form-select form-select-lg" [(ngModel)]="historyPatientId" name="historyPat">
+                        <option [value]="null" disabled selected>-- Choose Patient --</option>
+                        <option *ngFor="let p of patients" [value]="p.ID">{{p.user?.FullName || p.user?.FirstName || 'Patient #' + p.ID}} (ID: {{p.ID}})</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="button" class="btn btn-lg btn-info text-white w-100" [disabled]="isHistoryLoading" (click)="downloadMedicalHistory()">
+                  <span *ngIf="isHistoryLoading" class="spinner-border spinner-border-sm me-2"></span>
+                  <i class="bi bi-printer me-2"></i>Print Comprehensive History (HTML)
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accordion 2: Specialist Referral Letter -->
+    <div class="accordion accordion-modern" id="referralAccordionGroup">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#referralCollapse"
+            aria-expanded="true" aria-controls="referralCollapse">
+            <i class="bi bi-envelope-open-fill me-2 text-primary"></i>
+            <span class="accordion-title">Specialist Referral Letter Builder</span>
+          </button>
+        </h2>
+        <div id="referralCollapse" class="accordion-collapse collapse show">
+          <div class="accordion-body">
+            <div class="search-form-container">
+              <form class="search-form">
+                <!-- Select Patient -->
+                <div class="row g-3 mb-3">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="bi bi-person me-1"></i>Select Patient
+                      </label>
+                      <select class="form-select form-select-lg" [(ngModel)]="referralPatientId" name="refPat">
+                        <option [value]="null" disabled selected>-- Choose Patient --</option>
+                        <option *ngFor="let p of patients" [value]="p.ID">{{p.user?.FullName || p.user?.FirstName || 'Patient #' + p.ID}} (ID: {{p.ID}})</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Specialist & Clinic -->
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="bi bi-person-badge me-1"></i>Specialist / Doctor Name
+                      </label>
+                      <input type="text" class="form-control form-control-lg" placeholder="e.g. John Doe" [(ngModel)]="referralDoctorName" name="specName">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="bi bi-building me-1"></i>Destination Clinic / Hospital
+                      </label>
+                      <input type="text" class="form-control form-control-lg" placeholder="e.g. Apex Dental Hospital" [(ngModel)]="referralClinicName" name="clinicName">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Reason for Referral -->
+                <div class="row g-3 mb-4">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="bi bi-card-text me-1"></i>Reason for Referral
+                      </label>
+                      <textarea class="form-control form-control-lg" rows="3" placeholder="Describe symptoms, findings or advice requested..." [(ngModel)]="referralReason" name="reason"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="button-group d-flex gap-2 flex-wrap">
+                  <button type="button" class="btn btn-lg btn-primary flex-grow-1" [disabled]="isReferralLoading" (click)="downloadReferral()">
+                    <span *ngIf="isReferralLoading" class="spinner-border spinner-border-sm me-2"></span>
+                    <i class="bi bi-printer me-2"></i>Print Referral Letter (HTML)
+                  </button>
+                  <button type="button" class="btn btn-lg btn-outline-secondary flex-grow-1" (click)="clearReferralFilters()">
+                    <i class="bi bi-arrow-counterclockwise me-2"></i>Clear Filters
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

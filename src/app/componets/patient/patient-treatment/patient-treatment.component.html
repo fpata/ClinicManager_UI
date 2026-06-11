@@ -1,0 +1,348 @@
+<div class="page-container">
+  <div class="page-header mb-4 d-flex align-items-center justify-content-between">
+    <div class="header-content">
+      <h1 class="page-title mb-1">
+        <i class="bi bi-card-text me-2"></i>Patient Treatment
+      </h1>
+      <p class="page-subtitle">View and manage patient treatments</p>
+    </div>
+    <div class="header-actions text-end text-white">
+      <div class="fw-medium">
+        {{ patient?.user?.FirstName ? (patient.user.FirstName + ' ' + (patient.user.LastName || '')) : (user?.FullName
+        || (user?.FirstName + ' ' + user?.LastName)) }}
+      </div>
+      <div class="text-white-50 small">ID: {{ patient?.ID || user?.ID || '-' }}</div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="app-form">
+      <div class="accordion accordion-modern mb-3" id="treatmentAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#treatmentDetails"
+              aria-expanded="true" aria-controls="treatmentDetails">
+              <i class="bi bi-card-list me-2"></i>
+              <span class="accordion-title">Treatment Details</span>
+              <span class="accordion-badge badge bg-primary ms-auto">{{ treatment?.PatientTreatmentDetails?.length || 0
+                }}</span>
+            </button>
+          </h2>
+          <div id="treatmentDetails" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <h5 class="mb-0">Treatment</h5>
+                </div>
+
+              </div>
+
+              <div class="d-flex gap-3 mb-3 flex-wrap">
+                <div class="badge bg-light text-dark p-2">
+                  <small class="text-muted">Estimated Cost</small>
+                  <div class="fw-medium">{{treatment?.EstimatedCost || '0.00'}}</div>
+                </div>
+                <div class="badge bg-light text-dark p-2">
+                  <small class="text-muted">Actual Cost</small>
+                  <div class="fw-medium">{{treatment?.ActualCost || '0.00'}}</div>
+                </div>
+              </div>
+
+              <div class="row mb-3 align-items-start">
+                <label for="txtChiefComplaint" class="col-sm-2 col-form-label">Chief Complaint</label>
+                <div class="col-sm-10">
+                  <textarea id="txtChiefComplaint" class="form-control" rows="2" [ngModel]="treatment?.ChiefComplaint"
+                    (ngModelChange)="treatment.ChiefComplaint = $event" placeholder="Enter chief complaint" [disabled]="isPatientRole"></textarea>
+                </div>
+              </div>
+
+              <div class="row mb-3 align-items-start">
+                <label for="txtClinicalFindings" class="col-sm-2 col-form-label">Clinical Findings</label>
+                <div class="col-sm-10">
+                  <textarea id="txtClinicalFindings" class="form-control" rows="2"
+                    [ngModel]="treatment?.ClinicalFindings"
+                    (ngModelChange)="treatment.ClinicalFindings = $event" [disabled]="isPatientRole"></textarea>
+                </div>
+              </div>
+
+              <div class="row mb-3 align-items-start">
+                <label for="txtDiagnosis" class="col-sm-2 col-form-label">Diagnosis</label>
+                <div class="col-sm-10">
+                  <textarea id="txtDiagnosis" class="form-control" rows="2" [ngModel]="treatment?.Diagnosis"
+                    (ngModelChange)="treatment.Diagnosis = $event" [disabled]="isPatientRole"></textarea>
+                </div>
+              </div>
+
+              <div class="row mb-3 align-items-start">
+                <label for="txtPrescription" class="col-sm-2 col-form-label">Prescription</label>
+                <div class="col-sm-10">
+                  <div class="input-group">
+                    <textarea id="txtPrescription" class="form-control" rows="2" [ngModel]="treatment?.Prescription"
+                      (ngModelChange)="treatment.Prescription = $event" placeholder="Enter general prescription medication" [disabled]="isPatientRole"></textarea>
+                    <button class="btn btn-outline-primary d-flex align-items-center justify-content-center" type="button" 
+                      (click)="printPrescription()" title="Print General Prescription">
+                      <i class="bi bi-printer me-1"></i> Print Rx
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mb-3 align-items-start">
+                <label for="txtTreatmentPlan" class="col-sm-2 col-form-label">Treatment Plan</label>
+                <div class="col-sm-10">
+                  <textarea id="txtTreatmentPlan" class="form-control" rows="2" [ngModel]="treatment?.TreatmentPlan"
+                    (ngModelChange)="treatment.TreatmentPlan = $event" [disabled]="isPatientRole"></textarea>
+                </div>
+              </div>
+
+              <input type="hidden" id="txtTreatmentID" value="-1" [ngModel]="treatment?.ID">
+
+              <div class="row mb-3">
+                <label for="txtEstimatedCost" class="col-sm-2 col-form-label">Estimated Cost</label>
+                <div class="col-sm-3">
+                  <input type="number" id="txtEstimatedCost" class="form-control" [ngModel]="treatment?.EstimatedCost"
+                    (ngModelChange)="treatment.EstimatedCost = $event" placeholder="0.00" [disabled]="isPatientRole">
+                </div>
+                <div class="col-sm-2 d-none d-sm-block"></div>
+                <label for="txtActualCost" class="col-sm-2 col-form-label">Actual Cost</label>
+                <div class="col-sm-3">
+                  <input type="number" id="txtActualCost" class="form-control" [ngModel]="treatment?.ActualCost"
+                    (ngModelChange)="treatment.ActualCost = $event" placeholder="0.00" [disabled]="isPatientRole">
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results / Details Section -->
+      <div class="search-results">
+        <div class="results-header mb-4 d-flex align-items-center justify-content-between">
+          <h5 class="mb-0">
+            <i class="bi bi-list-ul me-2"></i>
+            <span class="results-title">Treatment Entries</span>
+            <span class="badge bg-primary rounded-pill ms-2">{{treatment?.PatientTreatmentDetails?.length || 0}}</span>
+          </h5>
+          @if (!isPatientRole) {
+          <div class="action-buttons-mobile d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+              data-bs-target="#addTreatmentModal" data-id="{{-1}}" (click)="AddNewTreatmentDetails()">
+              <i class="bi bi-plus-lg me-1"></i> Add Treatment
+            </button>
+          </div>
+          }
+        </div>
+
+        <div class="table-view d-none d-md-block">
+          <div class="table-responsive">
+            <table class="table table-hover table-striped results-table">
+              <thead>
+                <tr>
+                  <th class="text-center" style="width: 80px;">Actions</th>
+                  <th>Date</th>
+                  <th>Tooth</th>
+                  <th>Procedure</th>
+                  <th>Prescription</th>
+                  <th>Follow Up</th>
+                  <th class="text-end">Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (treatmentdetail of treatment?.PatientTreatmentDetails;track treatmentdetail.ID){
+                <tr class="table-row-hover">
+                  <td class="text-center align-middle">
+                    <div class="btn-group" role="group">
+                      @if (!isPatientRole) {
+                      <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal"
+                        data-bs-target="#addTreatmentModal" (click)="EditTreatmentDetails(treatmentdetail.ID)"
+                        title="Edit Treatment"><i class="bi bi-pencil"></i></button>
+                      }
+                      <button class="btn btn-sm btn-outline-success" type="button" (click)="printPrescription(treatmentdetail.ID)"
+                        title="Print Prescription"><i class="bi bi-printer"></i></button>
+                      @if (!isPatientRole) {
+                      <button class="btn btn-sm btn-outline-danger" type="button" title="Delete Treatment"
+                        (click)="DeleteTreatmentDetails(treatmentdetail.ID)"><i class="bi bi-trash"></i></button>
+                      }
+                    </div>
+                  </td>
+                  <td class="align-middle">{{treatmentdetail.TreatmentDate}}</td>
+                  <td class="align-middle">{{treatmentdetail.Tooth}}</td>
+                  <td class="align-middle">{{treatmentdetail.Procedure}}</td>
+                  <td class="align-middle">{{treatmentdetail.Prescription}}</td>
+                  <td class="align-middle">{{treatmentdetail.FollowUpInstructions}}</td>
+                  <td class="align-middle text-end">{{treatmentdetail.ProcedureTreatmentCost}}</td>
+                </tr>
+                }
+                @if (treatment?.PatientTreatmentDetails === undefined || treatment?.PatientTreatmentDetails.length == 0)
+                {
+                <tr>
+                  <td colspan="7" class="text-center py-5">
+                    <div class="empty-state">
+                      <i class="bi bi-inbox"></i>
+                      <p class="mt-3">No treatment entries available</p>
+                    </div>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="cards-view d-md-none">
+          @for (treatmentdetail of treatment?.PatientTreatmentDetails;track $index){
+          <div class="result-card">
+            <div class="card-header-custom">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="mb-1">{{treatmentdetail.Procedure}}</h6>
+                  <span class="badge bg-info">Date: {{treatmentdetail.TreatmentDate}}</span>
+                </div>
+                <div class="action-buttons-mobile d-flex gap-1">
+                  @if (!isPatientRole) {
+                  <button type="button" class="btn btn-sm btn-outline-primary"
+                    (click)="EditTreatmentDetails(treatmentdetail.ID)" title="Edit"><i
+                      class="bi bi-pencil"></i></button>
+                  }
+                  <button type="button" class="btn btn-sm btn-outline-success"
+                    (click)="printPrescription(treatmentdetail.ID)" title="Print"><i
+                      class="bi bi-printer"></i></button>
+                  @if (!isPatientRole) {
+                  <button type="button" class="btn btn-sm btn-outline-danger"
+                    (click)="DeleteTreatmentDetails(treatmentdetail.ID)" title="Delete"><i
+                      class="bi bi-trash"></i></button>
+                  }
+                </div>
+              </div>
+            </div>
+            <div class="card-body-custom">
+              <div class="info-row">
+                <span class="info-label"><i class="bi bi-geo-alt me-1"></i>Tooth:</span>
+                <span class="info-value">{{treatmentdetail.Tooth}}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label"><i class="bi bi-card-text me-1"></i>Prescription:</span>
+                <span class="info-value">{{treatmentdetail.Prescription}}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label"><i class="bi bi-alarm me-1"></i>Follow Up:</span>
+                <span class="info-value">{{treatmentdetail.FollowUpInstructions}}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label"><strong>Cost:</strong></span>
+                <span class="info-value">{{treatmentdetail.ProcedureTreatmentCost}}</span>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+
+
+        <!-- Action Buttons -->
+        @if (!isPatientRole) {
+        <div class="action-buttons-section mt-4 mb-4">
+          <div class="button-group d-flex gap-3 flex-wrap">
+            <button type="button" id="btnTreatmentSave" class="btn btn-lg btn-primary flex-grow-1"
+              (click)="SavePatientAndRedirect()">
+              <i class="bi bi-check-circle me-2"></i>Save Changes
+            </button>
+            <button type="button" id="btnTreatmentClear" class="btn btn-lg btn-outline-secondary flex-grow-1"
+              (click)="onClear()">
+              <i class="bi bi-arrow-counterclockwise me-2"></i>Clear Form
+            </button>
+            <button type="button" id="btnTreatmentDelete" class="btn btn-lg btn-outline-danger flex-grow-1"
+              (click)="onDelete()">
+              <i class="bi bi-trash me-2"></i>Delete Patient
+            </button>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Modal Add Treatment (kept unchanged) -->
+    <div class="modal fade" data-bs-keyboard="false" data-bs-backdrop="static" id="addTreatmentModal" tabindex="-1"
+      aria-labelledby="addTreatmentModal" (hidden.bs.modal)="ClearTreatmentForm()">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Treatment</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <br />
+            <div class="row">
+              <div class="col">
+                <label for="txtTreatmentDate" class="form-label">Treatment Date <span
+                    style="color: red;">*</span></label>
+              </div>
+              <div class="col">
+                <input type="date" id="txtTreatmentDate" class="form-control" min="2024-01-01" max="2030-12-31"
+                  [ngModel]="newTreatmentDetail?.TreatmentDate"
+                  (ngModelChange)="newTreatmentDetail && (newTreatmentDetail.TreatmentDate = $event)">
+              </div>
+            </div>
+            <br />
+            <div class="row">
+              <div class="col">
+                <label for="txtTooth" class="form-label">Tooth Number <span style="color: red;">*</span></label>
+              </div>
+              <div class="col">
+                <input type="text" id="txtTooth" class="form-control" [ngModel]="newTreatmentDetail?.Tooth"
+                  (ngModelChange)="newTreatmentDetail && (newTreatmentDetail.Tooth = $event)">
+              </div>
+            </div>
+            <br />
+            <div class="row">
+              <div class="col">
+                <label for="txtProcedure" class="form-label">Tooth Procedure <span style="color: red;">*</span></label>
+              </div>
+              <div class="col">
+                <input type="text" id="txtProcedure" class="form-control" [ngModel]="newTreatmentDetail?.Procedure"
+                  (ngModelChange)="newTreatmentDetail && (newTreatmentDetail.Procedure = $event)">
+              </div>
+            </div>
+            <br />
+            <div class="row">
+              <div class="col">
+                <label for="txtPrescription" class="form-label">Prescription Medication</label>
+              </div>
+              <div class="col">
+                <textarea id="txtPrescription" class="form-control" rows="2"
+                  [ngModel]="newTreatmentDetail?.Prescription"
+                  (ngModelChange)="newTreatmentDetail && (newTreatmentDetail.Prescription = $event)"></textarea>
+              </div>
+            </div>
+            <br />
+            <div class="row">
+              <div class="col">
+                <label for="txtFollowUpInstructions" class="form-label">Follow Up Instructions</label>
+              </div>
+              <div class="col">
+                <textarea id="txtFollowUpInstructions" class="form-control" rows="2"
+                  [ngModel]="newTreatmentDetail?.FollowUpInstructions"
+                  (ngModelChange)="newTreatmentDetail && (newTreatmentDetail.FollowUpInstructions = $event)"></textarea>
+              </div>
+            </div>
+            <br />
+            <div class="row">
+              <div class="col">
+                <label for="txtTreatmentCost" class="form-label">Treatment Cost</label>
+              </div>
+              <div class="col">
+                <input type="number" id="txtTreatmentCost" class="form-control" rows="2"
+                  [ngModel]="newTreatmentDetail?.ProcedureTreatmentCost"
+                  (ngModelChange)="newTreatmentDetail && (newTreatmentDetail.ProcedureTreatmentCost = $event)">
+              </div>
+            </div>
+            <br />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="SaveTreatmentDetails()">Save
+              Treatment</button>
+          </div>
+        </div>
+      </div>
+    </div>

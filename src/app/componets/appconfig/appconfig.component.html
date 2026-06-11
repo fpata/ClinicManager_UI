@@ -1,0 +1,191 @@
+<div class="page-container">
+  <!-- Page Header -->
+  <div class="page-header mb-4">
+    <div class="header-content">
+      <h1 class="page-title mb-1">
+        <i class="bi bi-gear-fill me-2"></i>Application Configuration
+      </h1>
+      <p class="page-subtitle">Manage clinic settings and preferences</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container-fluid">
+    <div class="accordion accordion-modern mb-3" id="appConfigAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#configAccordion"
+            aria-expanded="true" aria-controls="configAccordion">
+            <i class="bi bi-sliders2 me-2"></i>
+            <span class="accordion-title">Clinic Settings</span>
+          </button>
+        </h2>
+        <div id="configAccordion" class="accordion-collapse collapse show">
+          <div class="accordion-body">
+            <div class="search-form-container">
+              <form class="search-form">
+                <!-- Row 1: Clinic Name & Clinic Prop Name -->
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="txtClinicName" class="form-label">
+                        <i class="bi bi-building me-1"></i>Clinic Name
+                      </label>
+                      <input type="text" id="txtClinicName" class="form-control form-control-lg" placeholder="Clinic Name"
+                        [ngModel]="config?.ClinicName" (ngModelChange)="config && (config.ClinicName = $event)"
+                        name="clinicName" minlength="3" maxlength="50" required>
+                      <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="txtClinicProp" class="form-label">
+                        <i class="bi bi-person-badge me-1"></i>Clinic Prop Name
+                      </label>
+                      <input type="text" id="txtClinicProp" class="form-control form-control-lg" placeholder="Clinic Prop Name"
+                        [ngModel]="config?.ClinicProp" (ngModelChange)="config && (config.ClinicProp = $event)"
+                        name="clinicProp" minlength="3" maxlength="50" required>
+                      <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Row 2: Clinic Open Time & Clinic End Time -->
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="txtClinicOpenTime" class="form-label">
+                        <i class="bi bi-clock me-1"></i>Clinic Open Time
+                      </label>
+                      <input type="time" id="txtClinicOpenTime" class="form-control form-control-lg" placeholder="Clinic Open Time"
+                        [ngModel]="config?.ClinicOpenTime" (ngModelChange)="config && (config.ClinicOpenTime = $event)"
+                        name="clinicOpenTime" minlength="3" maxlength="50" required>
+                      <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="txtClinicEndTime" class="form-label">
+                        <i class="bi bi-clock-fill me-1"></i>Clinic End Time
+                      </label>
+                      <input type="time" id="txtClinicEndTime" class="form-control form-control-lg" placeholder="Clinic End Time"
+                        [ngModel]="config?.ClinicEndTime" (ngModelChange)="config && (config.ClinicEndTime = $event)"
+                        name="clinicEndTime" minlength="3" maxlength="50" required>
+                      <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Row 3: Per Patient Slot & Lunch Time -->
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="txtPerPatientSlot" class="form-label">
+                        <i class="bi bi-hourglass-split me-1"></i>Per Patient Slot (Minutes)
+                      </label>
+                      <input type="number" id="txtPerPatientSlot" class="form-control form-control-lg" placeholder="Per Patient Slot"
+                        [ngModel]="config?.PerPatientSlotInMinutes" (ngModelChange)="config && (config.PerPatientSlotInMinutes = $event)"
+                        name="perPatientSlot" min="1" max="180" required>
+                      <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="txtLunchTime" class="form-label">
+                        <i class="bi bi-cup-hot me-1"></i>Lunch Time
+                      </label>
+                      <input type="time" id="txtLunchTime" class="form-control form-control-lg" placeholder="Lunch Time"
+                        [ngModel]="config?.LunchTime" (ngModelChange)="config && (config.LunchTime = $event)"
+                        name="lunchTime" required>
+                      <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Row 3.5: Clinic Logo & Clinic Address -->
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="txtClinicLogo" class="form-label">
+                        <i class="bi bi-image me-1"></i>Clinic Logo
+                      </label>
+                      <input type="file" id="txtClinicLogo" class="form-control form-control-lg"
+                        (change)="onFileSelected($event)" accept="image/*">
+                      <!-- Simple logo preview helper -->
+                      <div class="logo-preview mt-2 d-flex align-items-center gap-2" *ngIf="config?.ClinicLogo">
+                        <img [src]="config?.ClinicLogo" alt="Clinic Logo Preview" style="max-height: 60px; max-width: 150px; border-radius: 0.25rem; border: 1px solid var(--border);">
+                        <button type="button" class="btn btn-sm btn-outline-danger" (click)="clearLogo()">
+                          <i class="bi bi-trash me-1"></i>Clear Logo
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="txtClinicAddress" class="form-label">
+                        <i class="bi bi-geo-alt me-1"></i>Clinic Address
+                      </label>
+                      <textarea id="txtClinicAddress" class="form-control form-control-lg" placeholder="Enter clinic address"
+                        [ngModel]="config?.ClinicAddress" (ngModelChange)="config && (config.ClinicAddress = $event)"
+                        name="clinicAddress" rows="2"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Row 4: Date Format & Currency (Dropdowns) -->
+                <div class="row g-3 mb-4">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="selDateFormat" class="form-label">
+                        <i class="bi bi-calendar-date me-1"></i>Date Format
+                      </label>
+                      <select id="selDateFormat" class="form-select form-select-lg"
+                        [ngModel]="config?.DateFormat" (ngModelChange)="config && (config.DateFormat = $event)"
+                        name="dateFormat" required>
+                        <option value="" disabled selected>Select Date Format</option>
+                        <option value="MM/dd/yyyy">MM/dd/yyyy</option>
+                        <option value="dd/MM/yyyy">dd/MM/yyyy</option>
+                        <option value="yyyy-MM-dd">yyyy-MM-dd</option>
+                        <option value="yyyy/MM/dd">yyyy/MM/dd</option>
+                      </select>
+                      <div class="invalid-feedback">Please select a date format.</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="selCurrency" class="form-label">
+                        <i class="bi bi-currency-exchange me-1"></i>Currency
+                      </label>
+                      <select id="selCurrency" class="form-select form-select-lg"
+                        [ngModel]="config?.Currency" (ngModelChange)="config && (config.Currency = $event)"
+                        name="currency" required>
+                        <option value="" disabled selected>Select Currency</option>
+                        <option value="USD">USD ($)</option>
+                        <option value="EUR">EUR (€)</option>
+                        <option value="GBP">GBP (£)</option>
+                        <option value="INR">INR (₹)</option>
+                        <option value="CAD">CAD ($)</option>
+                        <option value="AUD">AUD ($)</option>
+                      </select>
+                      <div class="invalid-feedback">Please select a currency.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="button-group d-flex gap-2 flex-wrap">
+                  <button type="button" class="btn btn-lg btn-primary flex-grow-1" (click)="saveConfig()">
+                    <i class="bi bi-save me-2"></i>Save Configuration
+                  </button>
+                  <button type="button" class="btn btn-lg btn-outline-secondary flex-grow-1" (click)="resetForm()">
+                    <i class="bi bi-arrow-counterclockwise me-2"></i>Reset
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

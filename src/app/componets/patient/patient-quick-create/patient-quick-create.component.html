@@ -1,0 +1,68 @@
+<div class="container-fluid">
+    <br />
+    <!-- Patient Medical Information Section -->
+    <div class="rounded" style="border:0.5px solid lightblue;padding: 40px; margin-bottom: 20px;">
+        <h5 class="mb-4">Patient Medical Information</h5>
+        
+        <div class="row">
+            <div class="col-2">
+                <label for="txtAllergies" class="form-label">Allergies & Reactions <span class="text-danger">*</span></label>
+            </div>
+            <div class="col-10">
+                <textarea id="txtAllergies" class="form-control" rows="2" [(ngModel)]="patient.Allergies" required></textarea>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-2">
+                <label for="txtMedications" class="form-label">Current Medications</label>
+            </div>
+            <div class="col-10">
+                <textarea id="txtMedications" class="form-control" rows="2" [(ngModel)]="patient.Medications"></textarea>
+            </div>
+        </div>
+    </div>
+    <!-- Initial Treatment Information Section -->
+    <div class="rounded" style="border:0.5px solid lightblue;padding: 40px;">
+        <h5 class="mb-4">Initial Treatment Information</h5>
+        
+        <div class="row">
+            <div class="col-2">
+                <label for="txtChiefComplaint" class="form-label">Chief Complaint <span class="text-danger">*</span></label>
+            </div>
+            <div class="col-10">
+                <textarea id="txtChiefComplaint" class="form-control" rows="3" [(ngModel)]="patient.PatientTreatment.ChiefComplaint" required></textarea>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-2">
+                <label for="txtTreatmentPlan" class="form-label">Treatment Plan <span class="text-danger">*</span></label>
+            </div>
+            <div class="col-10">
+                <textarea id="txtTreatmentPlan" class="form-control" rows="3" [(ngModel)]="patient.PatientTreatment.TreatmentPlan" required></textarea>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-2">
+                <label for="txtObservation" class="form-label">Observation</label>
+            </div>
+            <div class="col-10">
+                <textarea id="txtObservation" class="form-control" rows="2" [(ngModel)]="patient.PatientTreatment.ClinicalFindings"></textarea>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-2">
+                <label for="txtTreatmentDate" class="form-label">Treatment Date</label>
+            </div>
+            <div class="col-4">
+                <input type="date" id="txtTreatmentDate" class="form-control" [(ngModel)]="patient.PatientTreatment.TreatmentDate">
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />

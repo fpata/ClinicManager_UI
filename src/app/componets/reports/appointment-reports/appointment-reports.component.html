@@ -1,0 +1,91 @@
+<div class="page-container">
+  <!-- Page Header -->
+  <div class="page-header mb-4">
+    <div class="header-content">
+      <h1 class="page-title mb-1">
+        <i class="bi bi-calendar-week me-2"></i>Appointment Reports
+      </h1>
+      <p class="page-subtitle">Generate audits and logs of patient appointment scheduling and attendance</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container-fluid">
+    <!-- Accordion: Filter Criteria -->
+    <div class="accordion accordion-modern mb-3" id="appointmentReportsAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#searchCollapse"
+            aria-expanded="true" aria-controls="searchCollapse">
+            <i class="bi bi-search me-2"></i>
+            <span class="accordion-title">Report Criteria</span>
+          </button>
+        </h2>
+        <div id="searchCollapse" class="accordion-collapse collapse show">
+          <div class="accordion-body">
+            <div class="search-form-container">
+              <form class="search-form">
+                <!-- Row 1: Start Date & End Date -->
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="bi bi-calendar me-1"></i>Start Date
+                      </label>
+                      <input type="date" class="form-control form-control-lg" [(ngModel)]="appointmentStart" name="startDate">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="bi bi-calendar me-1"></i>End Date
+                      </label>
+                      <input type="date" class="form-control form-control-lg" [(ngModel)]="appointmentEnd" name="endDate">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Row 2: Status & Doctor -->
+                <div class="row g-3 mb-4">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="bi bi-info-circle me-1"></i>Appointment Status
+                      </label>
+                      <select class="form-select form-select-lg" [(ngModel)]="appointmentStatus" name="status">
+                        <option *ngFor="let s of appointmentStatuses" [value]="s.value">{{s.label}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="bi bi-person-badge me-1"></i>Doctor
+                      </label>
+                      <select class="form-select form-select-lg" [(ngModel)]="appointmentDoctorId" name="doctorId">
+                        <option [value]="null">All Doctors</option>
+                        <option *ngFor="let doc of doctors" [value]="doc.ID">Dr. {{doc.FullName}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="button-group d-flex gap-2 flex-wrap">
+                  <button type="button" class="btn btn-lg btn-primary flex-grow-1" [disabled]="isAppointmentLoading" (click)="downloadAppointments()">
+                    <span *ngIf="isAppointmentLoading" class="spinner-border spinner-border-sm me-2"></span>
+                    <i class="bi bi-download me-2"></i>Download Appointments Report (CSV)
+                  </button>
+                  <button type="button" class="btn btn-lg btn-outline-secondary flex-grow-1" (click)="clearFilters()">
+                    <i class="bi bi-arrow-counterclockwise me-2"></i>Clear Filters
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

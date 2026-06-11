@@ -1,0 +1,96 @@
+<div class="page-container">
+  <div class="page-header mb-4 d-flex align-items-center justify-content-between">
+    <div class="header-content">
+      <h1 class="page-title mb-1">
+        <i class="bi bi-clock-history me-2"></i>Medical History
+      </h1>
+      <p class="page-subtitle">View and manage patient medical history</p>
+    </div>
+    <div class="header-actions text-end">
+      <div class="fw-medium">
+        {{ patient?.user?.FirstName ? (patient.user.FirstName + ' ' + (patient.user.LastName || '')) : (user?.FullName
+        || (user?.FirstName + ' ' + user?.LastName)) }}
+      </div>
+      <div class="text-muted small">ID: {{ patient?.ID || user?.ID || '-' }}</div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="app-form">
+      <div class="card patient-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Medical History</h5>
+            <div class="text-end">
+              <small class="text-muted d-block">Last updated</small>
+            </div>
+          </div>
+
+          <div class="row mb-3 align-items-start">
+            <label for="txtMedications" class="col-sm-2 col-form-label">Medications</label>
+            <div class="col-sm-10">
+              <textarea id="txtMedications" class="form-control" rows="2" [ngModel]="this.patient?.Medications"
+                (ngModelChange)="this.patient.Medications = $event" placeholder="List current medications"></textarea>
+            </div>
+          </div>
+
+          <div class="row mb-3 align-items-start">
+            <label for="txtAllergies" class="col-sm-2 col-form-label">Allergies & Reactions</label>
+            <div class="col-sm-10">
+              <textarea id="txtAllergies" class="form-control" rows="2" [ngModel]="this.patient?.Allergies"
+                (ngModelChange)="this.patient.Allergies = $event" required
+                placeholder="Describe any allergies or adverse reactions"></textarea>
+            </div>
+          </div>
+
+          <div class="row mb-3 align-items-start">
+            <label for="txtPersonalMedicalHistory" class="col-sm-2 col-form-label">Personal Medical History</label>
+            <div class="col-sm-10">
+              <textarea id="txtPersonalMedicalHistory" class="form-control" rows="2"
+                [ngModel]="this.patient?.PersonalMedicalHistory"
+                (ngModelChange)="this.patient.PersonalMedicalHistory = $event"
+                placeholder="Chronic conditions, surgeries, etc."></textarea>
+            </div>
+          </div>
+
+          <div class="row mb-3 align-items-start">
+            <label for="txtFatherHistory" class="col-sm-2 col-form-label">Father Medical History</label>
+            <div class="col-sm-10">
+              <textarea id="txtFatherHistory" class="form-control" rows="2"
+                [ngModel]="this.patient?.FatherMedicalHistory"
+                (ngModelChange)="this.patient.FatherMedicalHistory = $event"
+                placeholder="Relevant family history"></textarea>
+            </div>
+          </div>
+
+          <div class="row mb-0 align-items-start">
+            <label for="txtMotherHistory" class="col-sm-2 col-form-label">Mother Medical History</label>
+            <div class="col-sm-10">
+              <textarea id="txtMotherHistory" class="form-control" rows="2"
+                [ngModel]="this.patient?.MotherMedicalHistory"
+                (ngModelChange)="this.patient.MotherMedicalHistory = $event"
+                placeholder="Relevant family history"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons-section mt-4 mb-4">
+        <div class="button-group d-flex gap-3 flex-wrap">
+          <button type="button" id="btnHistorySave" class="btn btn-lg btn-primary flex-grow-1" (click)="onSave()">
+            <i class="bi bi-check-circle me-2"></i>Save Changes
+          </button>
+          <button type="button" id="btnHistoryClear" class="btn btn-lg btn-outline-secondary flex-grow-1"
+            (click)="onClear()">
+            <i class="bi bi-arrow-counterclockwise me-2"></i>Clear Form
+          </button>
+          <button type="button" id="btnHistoryDelete" class="btn btn-lg btn-outline-danger flex-grow-1"
+            (click)="onDelete()">
+            <i class="bi bi-trash me-2"></i>Delete Patient
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+/* Theme-aware overrides (use CSS vars)
+   This file is imported by styles.css implicitly via the variables defined there.
+   It provides rules that reference CSS custom properties so theme changes are applied
+*/
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.navbar-gradient {
+  background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%);
+}
+
+.subnav {
+  background: var(--card-bg);
+}
+
+.form-control,
+.form-select {
+  border-color: var(--border);
+  background-color: var(--card-bg);
+  color: var(--text);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(102,126,234,0.08);
+}
+
+.app-table thead {
+  background: linear-gradient(135deg, var(--surface) 0%, rgba(0,0,0,0.02) 100%);
+}
+
+.result-card,
+.create-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.result-card:hover {
+  border-color: var(--primary-500);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%);
+  border: none;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--success) 0%, #20c997 100%);
+  border: none;
+}
+
+.btn-outline-primary {
+  border-color: var(--primary-500);
+  color: var(--primary-500);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-500);
+  color: white;
+}
+
+.btn-outline-danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.alert-danger {
+  background-color: rgba(255,235,238,0.95);
+  border-color: rgba(220,53,69,0.12);
+  color: var(--danger);
+}
+
+.alert-success {
+  background-color: rgba(240,253,244,0.95);
+  border-color: rgba(56,184,124,0.12);
+  color: var(--success);
+}
+
+.text-muted { color: var(--muted) !important; }
+
+/* Small theme-toggle utility */
+.theme-toggle-btn {
+  border-radius: 0.45rem;
+  padding: 0.35rem 0.6rem;
+}

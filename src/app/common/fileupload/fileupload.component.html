@@ -1,0 +1,14 @@
+<div class="upload-container">
+    <input type="file" (change)="onFileSelected($event)" class="form-control" />
+    <button type="button" (click)="uploadFile()" [disabled]="!selectedFile" class="btn btn-primary">Upload</button>
+    @if (uploadProgress > 0) {
+    <div>
+        Upload Progress: {{ uploadProgress }}%
+    </div>
+    }
+    @if(errorMessage) {
+    <div class="error">
+        {{ errorMessage }}
+    </div>
+    }
+</div>

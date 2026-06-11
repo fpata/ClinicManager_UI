@@ -1,0 +1,265 @@
+<div class="page-container">
+  @if (!billingRecord) {
+  <!-- Empty State -->
+  <div class="container-fluid">
+    <div class="card shadow-sm border-0 rounded-3">
+      <div class="card-body py-5 text-center">
+        <div class="empty-state">
+          <i class="bi bi-wallet2 text-primary fs-1 mb-3"></i>
+          <h4 class="fw-bold text-dark">No Billing Record Selected</h4>
+          <p class="text-muted max-width-500 mx-auto">
+            To record a payment, please go to the <strong>Billing Search</strong> tab, search for the patient, and click
+            <strong>Pay</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  } @else {
+  <!-- Main Content -->
+  <div class="container-fluid">
+    <!-- Back navigation link -->
+    <div class="mb-4">
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="ClearSelectedRecord()">
+        <i class="bi bi-arrow-left me-1"></i> Back to Search
+      </button>
+    </div>
+
+    <div class="row g-4">
+      <!-- Left Column: Billing Summary & Payment History -->
+      <div class="col-lg-7 col-md-12">
+        <!-- Billing Summary Card -->
+        <div class="card border-0 shadow-sm mb-4 rounded-3">
+          <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex align-items-center justify-content-between">
+            <h5 class="fw-bold mb-0 text-dark">
+              <i class="bi bi-receipt me-2 text-primary"></i>Billing Summary
+            </h5>
+            <span class="badge rounded-pill px-3 py-2" [class.bg-success]="billingRecord.Status === 'Paid'"
+              [class.bg-warning]="billingRecord.Status === 'PartiallyPaid'"
+              [class.bg-info]="billingRecord.Status === 'Submitted'"
+              [class.bg-secondary]="billingRecord.Status === 'Draft' || billingRecord.Status === 'Adjusted'"
+              [class.bg-danger]="billingRecord.Status === 'Voided'">
+              {{ billingRecord.Status }}
+            </span>
+          </div>
+          <div class="card-body px-4 pb-4">
+            <!-- Patient & Doctor Info Grid -->
+            <div class="row g-3 mb-4 p-3 bg-light rounded-3">
+              <div class="col-md-6 col-sm-12">
+                <small class="text-uppercase text-muted fw-bold d-block mb-1">Patient Name</small>
+                <span class="fs-6 fw-bold text-dark">{{ billingRecord.PatientName || 'N/A' }}</span>
+                <small class="text-muted d-block">(ID: {{ billingRecord.PatientID || 'N/A' }})</small>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <small class="text-uppercase text-muted fw-bold d-block mb-1">Doctor Name</small>
+                <span class="fs-6 fw-semibold text-dark">{{ billingRecord.DoctorName || 'N/A' }}</span>
+              </div>
+              <div class="col-md-6 col-sm-12 mt-2">
+                <small class="text-uppercase text-muted fw-bold d-block mb-1">Treatment</small>
+                <span class="fs-6 text-dark">{{ billingRecord.TreatmentName || 'N/A' }}</span>
+              </div>
+              <div class="col-md-6 col-sm-12 mt-2">
+                <small class="text-uppercase text-muted fw-bold d-block mb-1">Service Date</small>
+                <span class="fs-6 text-dark">{{ billingRecord.ServiceDate | appDate:'fullDate' }}</span>
+              </div>
+            </div>
+
+            <!-- Financial Summary List -->
+            <div class="financial-details mb-3">
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span class="text-muted">Subtotal</span>
+                <span class="fw-semibold">{{ billingRecord.Subtotal | currency }}</span>
+              </div>
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span class="text-muted">Tax</span>
+                <span>{{ billingRecord.TaxTotal | currency }}</span>
+              </div>
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span class="text-muted">Discount</span>
+                <span class="text-success">-{{ billingRecord.DiscountTotal | currency }}</span>
+              </div>
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span class="text-muted">Adjustments</span>
+                <span [class.text-danger]="billingRecord.AdjustmentTotal > 0">{{ billingRecord.AdjustmentTotal |
+                  currency }}</span>
+              </div>
+              <div class="d-flex justify-content-between py-2 border-bottom-2 bg-light px-2 rounded-2 mt-2">
+                <span class="fw-bold text-dark">Grand Total</span>
+                <span class="fw-bold text-primary fs-5">{{ billingRecord.Total | currency }}</span>
+              </div>
+              <div class="d-flex justify-content-between py-2 border-bottom-2 px-2">
+                <span class="fw-semibold text-success">Total Amount Paid</span>
+                <span class="fw-bold text-success fs-6">{{ billingRecord.AmountPaid | currency }}</span>
+              </div>
+              <div class="d-flex justify-content-between py-3 px-2 bg-danger-light rounded-3 mt-2">
+                <span class="fw-bold text-danger fs-6">Balance Due</span>
+                <span class="fw-bold text-danger fs-5">{{ billingRecord.BalanceDue | currency }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment History Card -->
+        <div class="card border-0 shadow-sm rounded-3">
+          <div class="card-header bg-transparent border-0 pt-4 px-4">
+            <h5 class="fw-bold mb-0 text-dark">
+              <i class="bi bi-clock-history me-2 text-primary"></i>Payment History
+            </h5>
+          </div>
+          <div class="card-body px-4 pb-4">
+            @if (paymentList.length === 0) {
+            <div class="alert alert-info border-0 mb-0 rounded-3">
+              <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+              <span>No payments have been recorded yet for this billing record.</span>
+            </div>
+            } @else {
+            <!-- Desktop Table View -->
+            <div class="table-responsive d-none d-md-block">
+              <table class="table table-hover results-table mb-0">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Method</th>
+                    <th>Reference</th>
+                    <th class="text-end">Amount</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (pay of paymentList; track pay.PaymentID) {
+                  <tr>
+                    <td>{{ pay.TransactionDate | appDate:'short' }}</td>
+                    <td>
+                      <span class="badge bg-light text-dark border px-2 py-1.5">{{ pay.PaymentMethod }}</span>
+                    </td>
+                    <td><code class="text-dark">{{ pay.Reference || 'N/A' }}</code></td>
+                    <td class="text-end fw-bold text-success">{{ pay.Amount | currency }}</td>
+                    <td class="text-muted small text-truncate" style="max-width: 150px;" [title]="pay.Notes || ''">{{
+                      pay.Notes || '-' }}</td>
+                  </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Mobile Payment Cards View -->
+            <div class="d-md-none cards-view">
+              @for (pay of paymentList; track pay.PaymentID) {
+              <div class="result-card p-3 border-start-success">
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="fw-bold text-dark">{{ pay.TransactionDate | appDate:'mediumDate' }}</span>
+                  <span class="fw-bold text-success">{{ pay.Amount | currency }}</span>
+                </div>
+                <div class="info-row py-1">
+                  <span class="info-label">Method:</span>
+                  <span class="info-value">{{ pay.PaymentMethod }}</span>
+                </div>
+                <div class="info-row py-1">
+                  <span class="info-label">Reference:</span>
+                  <span class="info-value"><code>{{ pay.Reference || 'N/A' }}</code></span>
+                </div>
+                @if (pay.Notes) {
+                <div class="info-row py-1">
+                  <span class="info-label">Notes:</span>
+                  <span class="info-value text-muted small">{{ pay.Notes }}</span>
+                </div>
+                }
+              </div>
+              }
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Record New Payment Form -->
+      <div class="col-lg-5 col-md-12">
+        <div class="card border-0 shadow-sm rounded-3">
+          <div class="card-header bg-transparent border-0 pt-4 px-4">
+            <h5 class="fw-bold mb-0 text-dark">
+              <i class="bi bi-plus-circle me-2 text-primary"></i>Record Payment
+            </h5>
+          </div>
+          <div class="card-body px-4 pb-4">
+            <form #paymentForm="ngForm" [ngClass]="{'was-validated': formSubmitted}" novalidate
+              (ngSubmit)="SavePayment(paymentForm)" class="app-form bg-transparent p-0 border-0">
+
+              <!-- Payment Amount -->
+              <div class="form-group mb-3">
+                <label for="txtAmount" class="form-label">
+                  <i class="bi bi-currency-dollar me-1"></i>Amount
+                  <span class="required-star">*</span>
+                </label>
+                <input type="number" id="txtAmount" name="Amount" class="form-control form-control-lg"
+                  [(ngModel)]="newPayment.Amount" required min="0.01" step="0.01" placeholder="Enter amount to pay">
+                <div class="invalid-feedback">
+                  <i class="bi bi-exclamation-circle me-1"></i>Please enter a valid amount greater than 0.
+                </div>
+              </div>
+
+              <!-- Payment Method -->
+              <div class="form-group mb-3">
+                <label for="cbMethod" class="form-label">
+                  <i class="bi bi-credit-card-2-front me-1"></i>Payment Method
+                  <span class="required-star">*</span>
+                </label>
+                <select id="cbMethod" name="PaymentMethod" class="form-select form-select-lg" [(ngModel)]="newPayment.PaymentMethod"
+                  required>
+                  @for (paymentMethod of paymentMethods; track paymentMethod) {
+                  <option [value]="paymentMethod">{{ paymentMethod }}</option>
+                  }
+                </select>
+                <div class="invalid-feedback">
+                  <i class="bi bi-exclamation-circle me-1"></i>Please select a payment method.
+                </div>
+              </div>
+
+              <!-- Transaction Date -->
+              <div class="form-group mb-3">
+                <label for="txtTxDate" class="form-label">
+                  <i class="bi bi-calendar-event me-1"></i>Payment Date
+                  <span class="required-star">*</span>
+                </label>
+                <input type="date" id="txtTxDate" name="TransactionDate" class="form-control form-control-lg"
+                  [(ngModel)]="newPayment.TransactionDate" required>
+                <div class="invalid-feedback">
+                  <i class="bi bi-exclamation-circle me-1"></i>Please select a transaction date.
+                </div>
+              </div>
+
+              <!-- Reference / Auth / Check # -->
+              <div class="form-group mb-3">
+                <label for="txtReference" class="form-label">
+                  <i class="bi bi-hash me-1"></i>Reference / Check / Auth #
+                </label>
+                <input type="text" id="txtReference" name="Reference" class="form-control form-control-lg"
+                  [(ngModel)]="newPayment.Reference" placeholder="e.g. Check #, Transaction ID">
+              </div>
+
+              <!-- Notes -->
+              <div class="form-group mb-4">
+                <label for="txtNotes" class="form-label">
+                  <i class="bi bi-sticky me-1"></i>Notes
+                </label>
+                <textarea id="txtNotes" name="Notes" class="form-control form-control-lg" rows="3"
+                  [(ngModel)]="newPayment.Notes" placeholder="Enter notes or explanation"></textarea>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="button-group d-flex gap-2 justify-content-end border-0 pt-0">
+                <button type="button" class="btn btn-outline-secondary flex-grow-1"
+                  (click)="resetPaymentForm(paymentForm)">
+                  <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                </button>
+                <button type="submit" class="btn btn-primary flex-grow-1">
+                  <i class="bi bi-check-circle me-1"></i>Submit Payment
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>

@@ -1,0 +1,279 @@
+<div class="page-container">
+    <div class="page-header mb-4 d-flex align-items-center justify-content-between">
+        <div class="header-content">
+            <h1 class="page-title mb-1">
+                <i class="bi bi-heart-pulse me-2"></i>Vitals
+            </h1>
+            <p class="page-subtitle">View and manage patient vital signs</p>
+        </div>
+        <div class="header-actions text-end">
+            <div class="fw-medium">
+                {{ patient?.user?.FirstName ? (patient.user.FirstName + ' ' + (patient.user.LastName || '')) :
+                (user?.FullName
+                || (user?.FirstName + ' ' + user?.LastName)) }}
+            </div>
+            <div class="text-muted small">ID: {{ patient?.ID || user?.ID || '-' }}</div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="app-form">
+            <div class="rounded p-md-5" style="border:0.5px solid lightblue;">
+                <div class="row">
+                    <div class="col-10">
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <button type="button" class="btn btn-primary" (click)="AddPatientVitals()">Add Vitals</button>
+                    </div>
+                </div>
+                <div style="font-size:xx-small;">&nbsp;</div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-5 col-md-2">
+                        <label for="txtBloodPressureSystolic" class="form-label">Blood Pressure Systolic:</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <input type="number" id="txtBloodPressureSystolic" class="form-control"
+                            [ngModel]="vitals?.BloodPressureSystolic"
+                            (ngModelChange)="vitals.BloodPressureSystolic = $event" />
+                    </div>
+                    <div class="col-xs-12 col-sm-2 col-md-1">&nbsp;</div>
+                    <div class="col-xs-12 col-sm-5 col-md-2">
+                        <label for="txtBloodPressureDiastolic" class="form-label">Blood Pressure Diastolic:</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <input type="number" id="txtBloodPressureDiastolic" class="form-control"
+                            [ngModel]="vitals?.BloodPressureDiastolic"
+                            (ngModelChange)="vitals.BloodPressureDiastolic = $event" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-xs-12 col-sm-5 col-md-2">
+                        <label for="txtHeartRate" class="form-label">Heart Rate:</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <input type="number" id="txtHeartRate" class="form-control" [ngModel]="vitals?.HeartRate"
+                            (ngModelChange)="vitals.HeartRate = $event" />
+                    </div>
+                    <div class="col-xs-12 col-sm-2 col-md-1">&nbsp;</div>
+                    <div class="col-xs-12 col-sm-5 col-md-2">
+                        <label for="txtTemperature" class="form-label">Temperature:</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <input type="text" id="txtTemperature" class="form-control" [ngModel]="vitals?.Temperature"
+                            (ngModelChange)="vitals.Temperature = $event" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-xs-12 col-sm-5 col-md-2">
+                        <label for="txtWeight" class="form-label">Weight:</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <input type="text" id="txtWeight" class="form-control" [ngModel]="vitals?.Weight"
+                            (ngModelChange)="vitals.Weight = $event" />
+                    </div>
+                    <div class="col-xs-12 col-sm-2 col-md-1">&nbsp;</div>
+                    <div class="col-xs-12 col-sm-5 col-md-2">
+                        <label for="txtHeight" class="form-label">Height:</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <input type="text" id="txtHeight" class="form-control" [ngModel]="vitals?.Height"
+                            (ngModelChange)="vitals.Height = $event" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-xs-12 col-sm-5 col-md-2">
+                        <label for="txtOxygenSaturation" class="form-label">Oxygen Saturation:</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <input type="number" id="txtOxygenSaturation" class="form-control"
+                            [ngModel]="vitals?.OxygenSaturation" (ngModelChange)="vitals.OxygenSaturation = $event" />
+                    </div>
+                    <div class="col-xs-12 col-sm-2 col-md-1">&nbsp;</div>
+                    <div class="col-xs-12 col-sm-5 col-md-2">
+                        <label for="txtRespiratoryRate" class="form-label">Respiratory Rate:</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <input type="text" id="txtRespiratoryRate" class="form-control"
+                            [ngModel]="vitals?.RespiratoryRate" (ngModelChange)="vitals.RespiratoryRate = $event" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-xs-12 col-sm-5 col-md-2">
+                        <label for="txtBloodType" class="form-label">Blood Type:</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <input type="text" id="txtBloodType" class="form-control" [ngModel]="vitals?.BloodType"
+                            (ngModelChange)="vitals.BloodType = $event" />
+                    </div>
+                    <div class="col-xs-12 col-sm-2 col-md-1">&nbsp;</div>
+                    <div class="col-xs-12 col-sm-5 col-md-2">
+                        <label for="txtNotes" class="form-label">Notes:</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <input type="text" id="txtNotes" class="form-control" [ngModel]="vitals?.Notes"
+                            (ngModelChange)="vitals.Notes = $event" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-xs-12 col-sm-5 col-md-2">
+                        <label for="txtSugarFasting" class="form-label">Sugar Fasting</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <input type="number" id="txtSugarFasting" class="form-control" [ngModel]="vitals?.SugarFasting"
+                            (ngModelChange)="vitals.SugarFasting = $event" />
+                    </div>
+                    <div class="col-xs-12 col-sm-2 col-md-1">&nbsp;</div>
+                    <div class="col-xs-12 col-sm-5 col-md-2">
+                        <label for="txtSugarPostPrandial" class="form-label">Sugar Post Prandial:</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <input type="number" id="txtSugarPostPrandial" class="form-control"
+                            [ngModel]="vitals?.SugarPostPrandial" (ngModelChange)="vitals.SugarPostPrandial = $event" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-xs-12 col-sm-5 col-md-2">
+                        <label for="txtSugarRandom" class="form-label">Sugar Random:</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <input type="number" id="txtSugarRandom" class="form-control" [ngModel]="vitals?.SugarRandom"
+                            (ngModelChange)="vitals.SugarRandom = $event" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-xs-12 col-sm-5 col-md-2">
+                        <label for="txtRecordedDate" class="form-label">Recorded Date:</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <input type="date" id="txtRecordedDate" class="form-control" [ngModel]="vitals?.RecordedDate"
+                            (ngModelChange)="vitals.RecordedDate = $event" />
+                    </div>
+                    <div class="col-xs-12 col-sm-2 col-md-1">&nbsp;</div>
+                    <div class="col-xs-12 col-sm-5 col-md-2">
+                        <label for="txtRecordedBy" class="form-label">Recorded By:</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <input type="text" id="txtRecordedBy" class="form-control" [ngModel]="vitals?.RecordedBy"
+                            (ngModelChange)="vitals.RecordedBy = $event" />
+                    </div>
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="rounded p-md-5" style="border:0.5px solid lightblue;">
+                <!--Results Table for Large Screen-->
+                <div class="row d-none d-md-block">
+                    <div class="col-12">
+                        <table class="table table-striped table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Blood Pressure Systolic</th>
+                                    <th>Blood Pressure Diastolic</th>
+                                    <th>Heart Rate</th>
+                                    <th>Temperature</th>
+                                    <th>Weight</th>
+                                    <th>Height</th>
+                                    <th>Oxygen Saturation</th>
+                                    <th>Respiratory Rate</th>
+                                    <th>Blood Type</th>
+                                    <th>Sugar Fasting</th>
+                                    <th>Sugar Post Prandial</th>
+                                    <th>Sugar Random</th>
+                                    <th>Notes</th>
+                                    <th>Recorded Date</th>
+                                    <th>Recorded By</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for(vital of patient?.PatientVitals; track $index) {
+                                <tr>
+                                    <td><a (click)="SetValuesForVitalID(vital?.ID)"
+                                            style="cursor: pointer; color: blue;">{{vital?.ID}}</a>
+                                    </td>
+                                    <td>{{vital?.BloodPressureSystolic}}</td>
+                                    <td>{{vital?.BloodPressureDiastolic}}</td>
+                                    <td>{{vital?.HeartRate}}</td>
+                                    <td>{{vital?.Temperature}}</td>
+                                    <td>{{vital?.Weight}}</td>
+                                    <td>{{vital?.Height}}</td>
+                                    <td>{{vital?.OxygenSaturation}}</td>
+                                    <td>{{vital?.RespiratoryRate}}</td>
+                                    <td>{{vital?.BloodType}}</td>
+                                    <td>{{vital?.SugarFasting}}</td>
+                                    <td>{{vital?.SugarPostPrandial}}</td>
+                                    <td>{{vital?.SugarRandom}}</td>
+                                    <td>{{vital?.Notes}}</td>
+                                    <td>{{vital?.RecordedDate}}</td>
+                                    <td>{{vital?.RecordedBy}}</td>
+                                </tr>
+                                }
+                        </table>
+                    </div>
+                </div>
+
+                <!--Table for Mobile App-->
+                <div class="row d-block d-md-none">
+                    <div class="table-responsive">
+                        <table class="table table-borderless">
+                            <tbody>
+                                @for (vital of patient?.PatientVitals; track $index){
+                                <tr>
+                                    <td>
+                                        <div
+                                            class="d-flex justify-content-between align-items-center mb-3 p-2 border rounded">
+                                            <div style="display: block;">
+                                                <div style="display: block;">
+                                                    <small class="text-muted">Blood Pressure :
+                                                        {{vital.BloodPressureSystolic}}/
+                                                        {{vital.BloodPressureDiastolic}}
+                                                        <br> Heart Rate: {{vital.HeartRate}}
+                                                        <br> Temperature: {{vital.Temperature}}
+                                                        <br> Respiration Rate : {{vital.RespiratoryRate}}
+                                                        <br> Oxygen Saturation : {{vital.OxygenSaturation}}
+                                                        <br> Blood Type: {{vital.BloodType}}
+                                                        <br> Recorded Date: {{vital.RecordedDate}}
+                                                        <br> Sugar Fasting: {{vital.SugarFasting}}
+                                                        <br> Sugar Post Prandial: {{vital.SugarPostPrandial}}
+                                                        <br> Sugar Random: {{vital.SugarRandom}}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons-section mt-4 mb-4">
+                <div class="button-group d-flex gap-3 flex-wrap">
+                    <button type="button" id="btnVitalsSave" class="btn btn-lg btn-primary flex-grow-1"
+                        (click)="onSave()">
+                        <i class="bi bi-check-circle me-2"></i>Save Changes
+                    </button>
+                    <button type="button" id="btnVitalsClear" class="btn btn-lg btn-outline-secondary flex-grow-1"
+                        (click)="onClear()">
+                        <i class="bi bi-arrow-counterclockwise me-2"></i>Clear Form
+                    </button>
+                    <button type="button" id="btnVitalsDelete" class="btn btn-lg btn-outline-danger flex-grow-1"
+                        (click)="onDelete()">
+                        <i class="bi bi-trash me-2"></i>Delete Patient
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

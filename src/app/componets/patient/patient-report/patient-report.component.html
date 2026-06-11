@@ -1,0 +1,178 @@
+<div class="page-container">
+  <div class="page-header mb-4 d-flex align-items-center justify-content-between">
+    <div class="header-content">
+      <h1 class="page-title mb-1">
+        <i class="bi bi-file-earmark-medical me-2"></i>Reports
+      </h1>
+      <p class="page-subtitle">View and manage patient medical reports</p>
+    </div>
+    <div class="header-actions text-end">
+      <div class="fw-medium">
+        {{ patient?.user?.FirstName ? (patient.user.FirstName + ' ' + (patient.user.LastName || '')) : (user?.FullName
+        || (user?.FirstName + ' ' + user?.LastName)) }}
+      </div>
+      <div class="text-muted small">ID: {{ patient?.ID || user?.ID || '-' }}</div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="app-form">
+      <div class="card patient-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Reports</h5>
+            <button type="button" id="btnAddReport" class="btn btn-primary" data-bs-toggle="modal"
+              data-bs-target="#addReportModal" (click)="AddReport()">Add Report</button>
+          </div>
+
+          <div class="table-responsive d-none d-md-block">
+            <table class="table table-striped mb-0">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Report Name</th>
+                  <th>Doctor Name</th>
+                  <th>Report Finding</th>
+                  <th>Operations</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for(report of reports; track report.ID) {
+                <tr>
+                  <td>{{report.ReportDate}}</td>
+                  <td>{{report.ReportName}}</td>
+                  <td>{{report.DoctorName}}</td>
+                  <td>{{report.ReportDetails}}</td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      <button class="btn btn-outline-primary btn-sm" (click)="DownloadReport(report.ReportFilePath)"
+                        title="Download Report"><i class="bi bi-cloud-download-fill"></i></button>
+                      <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal"
+                        data-bs-target="#addReportModal" (click)="EditReport(report.ID)" title="Edit Report"><i
+                          class="bi bi-person-fill-gear"></i></button>
+                      <button class="btn btn-danger btn-sm" type="button" (click)="DeleteReport(report.ID)"
+                        title="Delete Report"><i class="bi bi-person-fill-x"></i></button>
+                    </div>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <div class="d-block d-md-none">
+            <div class="list-group">
+              @for(report of reports; track report.ID) {
+              <div class="list-group-item list-group-item-action mb-2">
+                <div class="d-flex w-100 justify-content-between align-items-start">
+                  <div>
+                    <h6 class="mb-1">{{report.ReportName}}</h6>
+                    <small class="text-muted">{{report.ReportDate}} — {{report.DoctorName}}</small>
+                    <p class="mb-1 mt-2">{{report.ReportDetails}}</p>
+                  </div>
+                  <div class="btn-group-vertical">
+                    <button class="btn btn-outline-primary btn-sm" (click)="DownloadReport(report.ReportFilePath)"><i
+                        class="bi bi-cloud-download-fill"></i></button>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addReportModal"
+                      (click)="EditReport(report.ID)"><i class="bi bi-person-fill-gear"></i></button>
+                    <button class="btn btn-danger btn-sm" (click)="DeleteReport(report.ID)"><i
+                        class="bi bi-person-fill-x"></i></button>
+                  </div>
+                </div>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons-section mt-4 mb-4">
+        <div class="button-group d-flex gap-3 flex-wrap">
+          <button type="button" id="btnReportSave" class="btn btn-lg btn-primary flex-grow-1" (click)="onSave()">
+            <i class="bi bi-check-circle me-2"></i>Save Changes
+          </button>
+          <button type="button" id="btnReportClear" class="btn btn-lg btn-outline-secondary flex-grow-1"
+            (click)="onClear()">
+            <i class="bi bi-arrow-counterclockwise me-2"></i>Clear Form
+          </button>
+          <button type="button" id="btnReportDelete" class="btn btn-lg btn-outline-danger flex-grow-1"
+            (click)="onDelete()">
+            <i class="bi bi-trash me-2"></i>Delete Patient
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" data-bs-keyboard="false" data-bs-backdrop="static" id="addReportModal" tabindex="-1"
+  aria-labelledby="addReportModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="apptModalLabel">Add Reports</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <br />
+        <div class="row">
+          <div class="col">
+            <label for="txtReportDate" class="form-label">Report Date</label>
+          </div>
+          <div class="col">
+            <input type="date" id="txtReportDate" class="form-control" min="2024-01-01" max="2030-12-31"
+              [ngModel]="this.newReport?.ReportDate" (ngModelChange)="newReport.ReportDate = $event">
+          </div>
+        </div>
+        <br />
+        <div class="row">
+          <div class="col">
+            <label for="txtReportName" class="form-label">Report Name</label>
+          </div>
+          <div class="col">
+            <input type="text" id="txtReportName" class="form-control" [ngModel]="this.newReport?.ReportName"
+              (ngModelChange)="newReport.ReportName = $event">
+          </div>
+        </div>
+        <br />
+        <div class="row">
+          <div class="col">
+            <label for="txtDoctorName" class="form-label">Doctor Name</label>
+          </div>
+          <div class="col">
+            <app-typeahead [minLength]="2" [debounce]="300" [searchFn]="getDoctors" [displayWith]="displayName"
+              (selectItem)="newReport.DoctorID = $event.UserID; newReport.DoctorName = $event.FirstName + ' ' + $event.LastName">
+            </app-typeahead>
+          </div>
+        </div>
+        <br />
+        <div class="row">
+          <div class="col">
+            <label for="txtReportFinding" class="form-label">Findings</label>
+          </div>
+          <div class="col">
+            <textarea type="text" id="txtReportFinding" class="form-control" rows="2"
+              [ngModel]="this.newReport?.ReportDetails" (ngModelChange)="newReport.ReportDetails = $event"></textarea>
+          </div>
+        </div>
+        <br />
+        <div class="row">
+          <div class="col-12">
+            <app-file-upload (uploadComplete)="onFileUploaded($event)"></app-file-upload>
+          </div>
+        </div>
+        <br />
+        <div>
+          <input type="hidden" id="hdReportId" value="" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="SaveReport()">Save
+          changes</button>
+      </div>
+    </div>
+  </div>
+</div>

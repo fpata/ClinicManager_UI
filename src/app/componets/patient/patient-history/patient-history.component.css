@@ -1,0 +1,17 @@
+/* Patient History component styles */
+.patient-card h5 { font-size: 1.05rem; font-weight: 700; color: #222; }
+.patient-card .form-control { border-radius: .45rem; }
+.patient-card .form-label { font-weight: 600; color: #444; }
+.patient-card textarea.form-control { min-height: 56px; background: #fff; }
+.patient-card .card-body { padding: 1.25rem; }
+
+/* Subtle section separators */
+.patient-card .row + .row { margin-top: .5rem; }
+
+/* Small helper for last-updated area */
+.patient-card .text-muted { color: #7a7a7a; }
+
+@media (max-width: 575px) {
+  .patient-card { padding: .6rem; }
+  .patient-card .form-label { font-size: .95rem; }
+}

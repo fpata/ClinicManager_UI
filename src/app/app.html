@@ -1,0 +1,16 @@
+<div class="d-flex flex-column min-vh-100">
+  <app-header></app-header>
+  <div class="container-fluid flex-grow-1 py-3 px-4">
+    <app-messages></app-messages>
+    <router-outlet></router-outlet>
+  </div>
+  <app-footer></app-footer>
+</div>
+
+<!-- Global loading spinner -->
+<div class="loader-overlay" *ngIf="loaderService.isLoading$ | async">
+  <div class="loader-spinner">
+    <div class="spinner-icon"></div>
+    <div class="loader-text">Loading...</div>
+  </div>
+</div>

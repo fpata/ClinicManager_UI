@@ -1,0 +1,299 @@
+<div class="page-container">
+  <!-- Page Header -->
+  <div class="page-header mb-4">
+    <div class="header-content">
+      <h1 class="page-title mb-1">
+        <i class="bi bi-people-fill me-2"></i>Patient Search
+      </h1>
+      <p class="page-subtitle">Find and manage patient records</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container-fluid">
+    <!-- Search Form Section -->
+    <div class="accordion accordion-modern mb-3" id="patientSearchAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#searchAccordion"
+            aria-expanded="true" aria-controls="searchAccordion">
+            <i class="bi bi-search me-2"></i>
+            <span class="accordion-title">Search Criteria</span>
+            <span class="accordion-badge badge bg-primary ms-auto">5</span>
+          </button>
+        </h2>
+        <div id="searchAccordion" class="accordion-collapse collapse show">
+          <div class="accordion-body">
+            <div class="search-form-container">
+              <!-- Search Form -->
+              <form class="search-form">
+                <!-- Row 1: First Name & Last Name -->
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="txtSearchFirstName" class="form-label">
+                        <i class="bi bi-person me-1"></i>First Name
+                      </label>
+                      <input type="text" id="txtSearchFirstName" class="form-control form-control-lg" 
+                        [(ngModel)]="this.searchPatient.FirstName" name="firstName"
+                        minlength="3" maxlength="25" (ngModelChange)="validateSearchInput()"
+                        placeholder="Enter first name">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="txtSearchLastName" class="form-label">
+                        <i class="bi bi-person me-1"></i>Last Name
+                      </label>
+                      <input type="text" id="txtSearchLastName" class="form-control form-control-lg" 
+                        [(ngModel)]="this.searchPatient.LastName" name="lastName"
+                        minlength="3" maxlength="25" (ngModelChange)="validateSearchInput()"
+                        placeholder="Enter last name">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Row 2: Phone & Email -->
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="txtSearchPhone" class="form-label">
+                        <i class="bi bi-telephone me-1"></i>Phone Number
+                      </label>
+                      <input type="text" id="txtSearchPhone" class="form-control form-control-lg" 
+                        [(ngModel)]="this.searchPatient.PrimaryPhone" name="phone"
+                        minlength="3" maxlength="25" (ngModelChange)="validateSearchInput()"
+                        placeholder="Enter phone number">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="txtSearchEmailAddress" class="form-label">
+                        <i class="bi bi-envelope me-1"></i>Email Address
+                      </label>
+                      <input type="email" id="txtSearchEmailAddress" class="form-control form-control-lg"
+                        [(ngModel)]="this.searchPatient.PrimaryEmail" name="email"
+                        minlength="3" maxlength="25" (ngModelChange)="validateSearchInput()"
+                        placeholder="Enter email address">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Row 3: Patient ID & City -->
+                <div class="row g-3 mb-4">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="txtSearchPatientID" class="form-label">
+                        <i class="bi bi-hash me-1"></i>Patient ID
+                      </label>
+                      <input type="number" id="txtSearchPatientID" class="form-control form-control-lg"
+                        [(ngModel)]="this.searchPatient.PatientID" name="patientId"
+                        placeholder="Enter patient ID">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="txtSearchCity" class="form-label">
+                        <i class="bi bi-geo-alt me-1"></i>City
+                      </label>
+                      <input type="text" id="txtSearchCity" class="form-control form-control-lg" 
+                        [(ngModel)]="this.searchPatient.PermCity" name="city"
+                        minlength="3" maxlength="25" (ngModelChange)="validateSearchInput()"
+                        placeholder="Enter city name">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Validation Error -->
+                @if(searchLengthConstraintError) {
+                <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                  <i class="bi bi-exclamation-circle me-2"></i>
+                  <strong>Search Error:</strong> At least 3 characters should be entered in any one field
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                }
+
+                <!-- Action Buttons -->
+                <div class="button-group d-flex gap-2 flex-wrap">
+                  <button type="button" class="btn btn-lg btn-primary flex-grow-1" (click)="SearchPatient()">
+                    <i class="bi bi-search me-2"></i>Search Patient
+                  </button>
+                  <button type="button" class="btn btn-lg btn-outline-secondary flex-grow-1" (click)="clearSearch()">
+                    <i class="bi bi-arrow-counterclockwise me-2"></i>Clear Search
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Results Section -->
+    <div class="search-results">
+      <div class="results-header mb-4 d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">
+          <i class="bi bi-list-ul me-2"></i>
+          <span class="results-title">Search Results</span>
+          <span class="badge bg-primary rounded-pill ms-2">{{searchResult?.TotalCount || 0}}</span>
+        </h5>
+      </div>
+
+      <!-- Desktop Table View -->
+      <div class="table-view d-none d-md-block">
+        <div class="table-responsive">
+          <table class="table table-hover table-striped results-table">
+            <thead>
+              <tr>
+                <th class="text-center" style="width: 50px;" data-bs-toggle="tooltip" 
+                    title="Add New Procedure"><i class="bi bi-plus-circle me-1"></i>Add</th>
+                <th class="text-center" style="width: 50px;" data-bs-toggle="tooltip" 
+                    title="Edit Last Procedure"><i class="bi bi-pencil-square me-1"></i>Edit</th>
+                <th class="text-center" style="width: 50px;" data-bs-toggle="tooltip" 
+                    title="Quick Create New Procedure"><i class="bi bi-lightning-fill me-1"></i>Quick</th>
+                <th class="text-center" style="width: 50px;" data-bs-toggle="tooltip" 
+                    title="Delete Patient"><i class="bi bi-trash3 me-1"></i>Delete</th>
+                <th data-bs-toggle="tooltip" 
+                    title="First Name"><i class="bi bi-person me-1"></i>First Name</th>
+                <th data-bs-toggle="tooltip" 
+                    title="Last Name"><i class="bi bi-person me-1"></i>Last Name</th>
+                <th data-bs-toggle="tooltip" 
+                    title="City"><i class="bi bi-geo-alt me-1"></i>City</th>
+                <th data-bs-toggle="tooltip" 
+                    title="Email"><i class="bi bi-envelope me-1"></i>Email</th>
+                <th data-bs-toggle="tooltip" 
+                    title="Phone"><i class="bi bi-telephone me-1"></i>Phone</th>
+                    <th data-bs-toggle="tooltip"
+                     title="Last Treatment"><i class="bi bi-card-text me-1"></i>Last Treatment</th>
+                    <th data-bs-toggle="tooltip" 
+                     title="Treatment Date"><i class="bi bi-card-text me-1"></i>Treatment Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (result of searchResult.Results; track $index){
+              <tr class="table-row-hover">
+                <td class="text-center">
+                  <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" 
+                    title="Add New Procedure" (click)="AddNewPatient(result,false)">
+                    <i class="bi bi-person-fill-add"></i>
+                  </button>
+                </td>
+                <td class="text-center">
+                  <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" 
+                    title="Update Last Procedure" (click)="UpdatePatient(result)">
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                </td>
+                <td class="text-center">
+                  <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip" 
+                    title="Quick Create New Procedure" (click)="AddNewPatient(result,true)">
+                    <i class="bi bi-lightning-fill"></i>
+                  </button>
+                </td>
+                <td class="text-center">
+                  <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" 
+                    title="Delete Patient" (click)="DeletePatient(result)">
+                    <i class="bi bi-trash3"></i>
+                  </button>
+                </td>
+                <td class="fw-medium">{{result.FirstName}}</td>
+                <td>{{result.LastName}}</td>
+                <td>{{result.PermCity}}</td>
+                <td>
+                  <a href="mailto:{{result.PrimaryEmail}}" class="link-email">{{result.PrimaryEmail}}</a>
+                </td>
+                <td>
+                  <a href="tel:{{result.PrimaryPhone}}" class="link-phone">{{result.PrimaryPhone}}</a>
+                </td>
+                <td>{{result.LastTreatmentName}}</td>
+                <td>{{result.LastTreatmentDate}}</td>
+              </tr>
+              }
+              @if (searchResult === undefined || searchResult.Results.length == 0) {
+              <tr>
+                <td colspan="9" class="text-center py-5">
+                  <div class="empty-state">
+                    <i class="bi bi-inbox"></i>
+                    <p class="mt-3">No records found matching your search criteria</p>
+                  </div>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Mobile Cards View -->
+      <div class="cards-view d-md-none">
+        @for (result of searchResult.Results; track $index){
+        <div class="result-card">
+          <div class="card-header-custom">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h6 class="mb-1">{{result.FirstName}} {{result.LastName}}</h6>
+                <span class="badge bg-info">ID: {{result.PatientID}}</span>
+              </div>
+              <div class="action-buttons-mobile">
+                <button type="button" class="btn btn-sm btn-outline-primary" 
+                  (click)="AddNewPatient(result,false)" title="Add">
+                  <i class="bi bi-person-fill-add"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-primary" 
+                  (click)="UpdatePatient(result)" title="Edit">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-success" 
+                  (click)="AddNewPatient(result,true)" title="Quick">
+                  <i class="bi bi-lightning-fill"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-danger" 
+                  (click)="DeletePatient(result)" title="Delete">
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body-custom">
+            <div class="info-row">
+              <span class="info-label"><i class="bi bi-geo-alt me-1"></i>City:</span>
+              <span class="info-value">{{result.PermCity}}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label"><i class="bi bi-envelope me-1"></i>Email:</span>
+              <span class="info-value">
+                <a href="mailto:{{result.PrimaryEmail}}" class="link-email">{{result.PrimaryEmail}}</a>
+              </span>
+            </div>
+            <div class="info-row">
+              <span class="info-label"><i class="bi bi-telephone me-1"></i>Phone:</span>
+              <span class="info-value">
+                <a href="tel:{{result.PrimaryPhone}}" class="link-phone">{{result.PrimaryPhone}}</a>
+              </span>
+            </div>
+          </div>
+        </div>
+        }
+        
+        @if (searchResult === undefined || searchResult.Results.length == 0){
+        <div class="empty-state text-center py-5">
+          <i class="bi bi-inbox"></i>
+          <p class="mt-3">No records found matching your search criteria</p>
+        </div>
+        }
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-container mt-4">
+        @if(searchResult?.Results?.length > 0) {
+        <app-paging
+          [totalItems]="totalItems"
+          [pageSize]="pageSize"
+          [currentPage]="currentPage"
+          (pageChange)="onPageChanged($event)">
+        </app-paging>
+        }
+      </div>
+    </div>
+  </div>
+</div>

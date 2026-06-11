@@ -1,0 +1,254 @@
+<div class="container-fluid py-4 bg-light min-vh-100">
+  <!-- Header Section -->
+  @if (!isEmbedded) {
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="fw-bold text-primary mb-1">
+        <i class="bi bi-hospital"></i> Appointment Management
+      </h1>
+      <p class="text-muted">Manage patient appointments and schedules</p>
+    </div>
+  </div>
+  }
+
+  <!-- Appointments Table Section -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">
+        <i class="bi bi-calendar-event"></i> Scheduled Appointments
+      </h5>
+      @if (!isPatientRole) {
+      <button type="button" id="btnAddNewAppointment" class="btn btn-light btn-sm" data-bs-toggle="modal"
+        data-bs-target="#addAppointmentModal" (click)="InitializeNewAppointment()">
+        <i class="bi bi-plus-circle"></i> Add New
+      </button>
+      }
+    </div>
+    <div class="card-body p-0">
+      <!-- Desktop Version Table -->
+      <div class="d-none d-md-block">
+        <div class="table-responsive">
+          <table class="table table-hover table-striped mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="text-nowrap fw-semibold">Start Date</th>
+                <th class="text-nowrap fw-semibold">Start Time</th>
+                <th class="text-nowrap fw-semibold">End Time</th>
+                <th class="text-nowrap fw-semibold">Doctor</th>
+                <th class="text-nowrap fw-semibold">Patient</th>
+                <th class="text-nowrap fw-semibold">Treatment</th>
+                @if (!isPatientRole) {
+                <th class="text-center fw-semibold">Actions</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for( appointment of appointments; track appointment.ID) {
+              <tr class="align-middle">
+                <td class="text-nowrap">
+                  <span class="badge bg-info text-dark fs-7">{{appointment.StartDateTime | appDate:'mediumDate'}}</span>
+                </td>
+                <td class="text-nowrap"><strong>{{appointment.StartTime}}</strong></td>
+                <td class="text-nowrap">{{appointment.EndTime}}</td>
+                <td>
+                  <span class="badge bg-success">{{appointment.DoctorName}}</span>
+                </td>
+                <td>
+                  <span class="badge bg-warning text-dark">{{appointment.PatientName}}</span>
+                </td>
+                <td>
+                  <small>{{appointment.TreatmentName}}</small>
+                </td>
+                @if (!isPatientRole) {
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addAppointmentModal"
+                    (click)="EditAppointment(appointment.ID)" title="Edit appointment" type="button">
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger ms-2" 
+                    (click)="DeleteAppointment(appointment.ID)" title="Delete appointment" type="button">
+                    <i class="bi bi-trash3"></i>
+                  </button>
+                </td>
+                }
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Mobile Version Cards -->
+      <div class="d-block d-md-none px-3 py-2">
+        @for( appointment of appointments; track appointment.ID) {
+        <div class="card mb-3 border-start border-primary border-4">
+          <div class="card-body">
+            <div class="row g-2">
+              <div class="col-6">
+                <small class="text-muted d-block">Date</small>
+                <strong>{{appointment.StartDateTime | appDate:'mediumDate'}}</strong>
+              </div>
+              <div class="col-6">
+                <small class="text-muted d-block">Time</small>
+                <strong>{{appointment.StartTime}} - {{appointment.EndTime}}</strong>
+              </div>
+              <div class="col-12">
+                <small class="text-muted d-block">Doctor</small>
+                <span class="badge bg-success">{{appointment.DoctorName}}</span>
+              </div>
+              <div class="col-12">
+                <small class="text-muted d-block">Patient</small>
+                <span class="badge bg-warning text-dark">{{appointment.PatientName}}</span>
+              </div>
+              <div class="col-12">
+                <small class="text-muted d-block">Treatment</small>
+                <p class="mb-0">{{appointment.TreatmentName}}</p>
+              </div>
+              @if (!isPatientRole) {
+              <div class="col-12 pt-2 d-flex gap-2">
+                <button class="btn btn-sm btn-outline-primary flex-grow-1" data-bs-toggle="modal" 
+                  data-bs-target="#addAppointmentModal"
+                  (click)="EditAppointment(appointment.ID)" type="button">
+                  <i class="bi bi-pencil-square"></i> Edit
+                </button>
+                <button class="btn btn-sm btn-outline-danger flex-grow-1" 
+                  (click)="DeleteAppointment(appointment.ID)" type="button">
+                  <i class="bi bi-trash3"></i> Delete
+                </button>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+
+      <!-- Empty State -->
+      @if (appointments.length === 0) {
+      <div class="text-center py-5">
+        <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+        <p class="text-muted mt-3">No appointments found</p>
+      </div>
+      }
+    </div>
+  </div>
+
+  <!-- Search Results Info -->
+  @if (!isEmbedded) {
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="alert alert-info border-0" role="alert">
+        <i class="bi bi-info-circle"></i>
+        <strong>Search Results:</strong> <span class="badge bg-info">{{totalItems}}</span> record(s) found
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Pagination -->
+  @if (!isEmbedded) {
+  <div class="row mb-4">
+    <div class="col-12">
+      <app-paging [totalItems]="totalItems" [pageSize]="pageSize" [currentPage]="currentPage"
+        (pageChange)="onPageChange($event)">
+      </app-paging>
+    </div>
+  </div>
+  }
+
+  <!-- Scheduler Section (Accordion) -->
+  <div class="accordion accordion-modern mb-4" id="calendarAccordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingCalendar">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCalendar"
+          aria-expanded="true" aria-controls="collapseCalendar">
+          <i class="bi bi-calendar-week me-2"></i>
+          <span class="accordion-title">Calendar View</span>
+        </button>
+      </h2>
+      <div id="collapseCalendar" class="accordion-collapse collapse show" aria-labelledby="headingCalendar">
+        <div class="accordion-body p-4">
+          <app-scheduler (onNavigationChange)="NavigationChange($event)"
+            (onTimeRangeSelectedEvent)="onTimeRangeSelectedEvent($event)">
+          </app-scheduler>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Appointment Modal -->
+<div class="modal fade" data-bs-keyboard="false" data-bs-backdrop="static" id="addAppointmentModal" tabindex="-1"
+  aria-labelledby="addAppointmentModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-primary text-white border-0">
+        <h5 class="modal-title" id="apptModalLabel">
+          <i class="bi bi-plus-circle"></i> Add Appointment
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Appointment Date -->
+        <div class="mb-3">
+          <label for="txtAppointmentDate" class="form-label fw-semibold">Appointment Date</label>
+          <input type="date" id="txtAppointmentDate" class="form-control form-control-lg" min="2025-01-01" max="2026-12-31"
+            [ngModel]="this.newStartDateString" (ngModelChange)="onAppointmentDateChanged($event)">
+        </div>
+
+        <!-- Start Time -->
+        <div class="row">
+          <div class="col-6">
+            <label for="txtAppointmentTime" class="form-label fw-semibold">Start Time</label>
+            <input type="time" id="txtAppointmentTime" class="form-control form-control-lg" step="1800" 
+              [ngModel]="this.newAppointment?.StartTime" (ngModelChange)="onStartTimeChanged($event)">
+          </div>
+          <div class="col-6">
+            <label for="txtAppointmentEndTime" class="form-label fw-semibold">End Time</label>
+            <input type="time" id="txtAppointmentEndTime" class="form-control form-control-lg" step="1800" 
+              [ngModel]="this.newAppointment?.EndTime" (ngModelChange)="onEndTimeChanged($event)">
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Patient Name -->
+        <div class="mb-3">
+          <label for="txtApptPatientName" class="form-label fw-semibold">Patient Name</label>
+          @if (patientId) {
+            <input type="text" class="form-control form-control-lg" readonly [value]="newAppointment?.PatientName || ''">
+          } @else {
+            <app-typeahead [minLength]="2" [debounce]="300" [searchFn]="getPatients" [displayWith]="displayName"
+              [(ngModel)]="selectedPatient" (ngModelChange)="onPatientSelected($event)">
+            </app-typeahead>
+          }
+        </div>
+
+        <!-- Doctor Name -->
+        <div class="mb-3">
+          <label for="txtApptDoctorName" class="form-label fw-semibold">Doctor Name</label>
+          <app-typeahead [minLength]="2" [debounce]="300" [searchFn]="getDoctors" [displayWith]="displayName"
+            [(ngModel)]="selectedDoctor" (ngModelChange)="onDoctorSelected($event)">
+          </app-typeahead>
+        </div>
+
+        <!-- Treatment -->
+        <div class="mb-3">
+          <label for="txtApptProcedure" class="form-label fw-semibold">Treatment</label>
+          <input type="text" id="txtApptProcedure" class="form-control form-control-lg" placeholder="Enter treatment name"
+            [ngModel]="newAppointment?.TreatmentName"
+            (ngModelChange)="newAppointment.TreatmentName = $event">
+        </div>
+      </div>
+      <div class="modal-footer border-0 bg-light">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle"></i> Close
+        </button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="SaveAppointment()">
+          <i class="bi bi-check-circle"></i> Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

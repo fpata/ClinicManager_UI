@@ -1,0 +1,79 @@
+<form class="was-validated">
+  <div class="conatiner-fluid">
+    <!--Visible on medium and large screens only-->
+    <div class="d-none d-md-block d-lg-block">
+      <ul class="nav nav-tabs nav-justified flex-column flex-sm-row" id="tbUser" role="tablist">
+        <li class="nav-item" role="presentation" id="navUserSearch">
+          <button class="nav-link active" id="tbUserSearch-tab" data-bs-toggle="tab" data-bs-target="#tbUserSearch"
+            type="button" role="tab" aria-controls="tbUserSearch" aria-selected="true"
+            (click)="tabSelectedEvent($event)">Search</button>
+        </li>
+        <li class="nav-item" role="presentation" id="navPersonalInfo">
+          <button class="nav-link" id="tbPersonalInfo-tab" data-bs-toggle="tab" data-bs-target="#tbPersonalInfo"
+            type="button" role="tab" aria-controls="tbPersonalInfo" aria-selected="false"
+            (click)="tabSelectedEvent($event)">Personal Information</button>
+        </li>
+        <li class="nav-item" role="presentation" id="navQuickCreate">
+          <button class="nav-link" id="tbQuickCreate-tab" data-bs-toggle="tab" data-bs-target="#tbQuickCreate"
+            type="button" role="tab" aria-controls="tbQuickCreate" aria-selected="false"
+            (click)="tabSelectedEvent($event)">Quick Create</button>
+        </li>
+      </ul>
+    </div>
+    <!--Visible on small screens only-->
+    <div class="d-block d-md-none d-lg-none">
+      <select class="form-select" aria-label="User Info Tabs" (change)="mobileTabSelectedEvent($event)">
+        <option selected value="tbUserSearch">Search</option>
+        <option value="tbPersonalInfo">Personal Information</option>
+        <option value="tbQuickCreate">Quick Create</option>
+      </select>
+    </div>
+    <div class="tab-content" id="nav-tabContentUserInfo">
+      <div class="tab-pane fade show active" id="tbUserSearch" role="tabpanel" aria-labelledby="tbUserSearch-tab">
+        <app-user-search></app-user-search>
+      </div>
+
+      <div class="tab-pane fade" id="tbPersonalInfo" role="tabpanel" aria-labelledby="tbPersonalInfo-tab">
+        <app-user-info></app-user-info>
+      </div>
+
+      <div class="tab-pane fade" id="tbQuickCreate" role="tabpanel" aria-labelledby="tbQuickCreate-tab">
+        <app-user-quick-create></app-user-quick-create>
+      </div>
+    </div>
+  </div>
+  <br />
+<div class="container-fluid">
+  @if(!isSearchTabSelected) {
+    <div class="row">
+      <div class="col">
+        <button type="button" id="btnPatientSave" class="btn btn-primary" style="width: 25%;"
+          (click)="SaveUserInformation()">Save</button>
+      </div>
+      <div class="col">
+        <button type="button" id="btnPatientClear" class="btn btn-secondary" style="width: 25%;"
+          (click)="ClearUserInformation()">Clear</button>
+      </div>
+      <div class="col">
+        <button type="button" id="btnPatientDelete" class="btn btn-secondary" style="width: 25%;"
+          (click)="DeleteUserInformation()">Delete</button>
+      </div>
+    </div>
+    } 
+    @if(isSearchTabSelected) {
+    <div class="row">
+      <div class="col" style="text-align: center;">
+        <button type="button" id="btnNewUser" class="btn btn-primary" style="width: 35%;" (click)="AddNewUser()">New
+          User</button>
+      </div>
+      <div class="col" style="text-align: center;">
+        <button type="button" id="btnQuickCreateUser" class="btn btn-secondary" style="width: 35%;"
+          (click)="QuickCreateUser()">Quick Create User</button>
+      </div>
+    </div>
+    }
+  </div>
+<br>
+<br>
+<br>
+</form>
