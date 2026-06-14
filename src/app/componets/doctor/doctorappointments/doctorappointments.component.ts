@@ -15,10 +15,11 @@ import { UtilityService } from '../../../services/utility.service';
 import { UserType } from '../../../models/user.model';
 import { PagingComponent } from '../../../common/paging/paging.component';
 import { AppConfigService } from '../../../services/config.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-doctor-appointments',
-  imports: [SchedulerComponent, FormsModule, TypeaheadComponent, PagingComponent],
+  imports: [SchedulerComponent, FormsModule, TypeaheadComponent, PagingComponent, DatePipe],
   templateUrl: './doctorappointments.component.html',
   styleUrls: ['./doctorappointments.component.css'],
   providers: [HttpClient],
@@ -263,6 +264,20 @@ export class DoctorAppointmentsComponent {
     }
   }
 
+  SendReminderEmail(appointment: PatientAppointment) {
+    if (!appointment.ID) return;
+    this.patientAppointmentService.sendReminderEmail(appointment.ID).subscribe({
+      next: (res: any) => {
+        this.messageService.success('Reminder email sent successfully.');
+        appointment.ReminderSentDate = res.reminderSentDate ? new Date(res.reminderSentDate) : new Date();
+        this.cdrRef.detectChanges();
+      },
+      error: (err: any) => {
+        console.error(err);
+        this.messageService.error(err.error?.message || err.error || 'Error occurred while sending reminder email.');
+      }
+    });
+  }
 
   AddEventsToScheduler(this: any, appointments: PatientAppointment[]) {
     var events: DayPilot.EventData[] = [];

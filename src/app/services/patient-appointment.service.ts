@@ -73,4 +73,8 @@ export class PatientAppointmentService {
     }
     return appointments;
   }
+
+  sendReminderEmail(id: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${id}/send-reminder`, {}, { headers: this.getAuthHeaders() });
+  }
 }
