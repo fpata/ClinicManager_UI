@@ -1,0 +1,91 @@
+/* AI Styling for Patient Report Analysis */
+
+.bg-light-purple {
+  background-color: rgba(138, 43, 226, 0.05);
+  border-left: 3px solid rgba(138, 43, 226, 0.6) !important;
+  transition: all 0.3s ease;
+}
+
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.btn-ai {
+  background: linear-gradient(135deg, #8a2be2 0%, #4a00e0 100%);
+  color: #ffffff;
+  border: none;
+  font-weight: 500;
+  box-shadow: 0 4px 10px rgba(138, 43, 226, 0.25);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ai:hover {
+  background: linear-gradient(135deg, #9b42f5 0%, #5c13ef 100%);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(138, 43, 226, 0.35);
+}
+
+.btn-ai:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 5px rgba(138, 43, 226, 0.2);
+}
+
+.btn-ai:disabled {
+  background: #cbd5e1;
+  color: #64748b;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ai-processing-loader {
+  background-color: rgba(138, 43, 226, 0.02);
+  border: 1px dashed rgba(138, 43, 226, 0.3) !important;
+  border-radius: 8px;
+  animation: border-pulse 2s infinite ease-in-out;
+}
+
+.text-purple {
+  color: #8a2be2;
+}
+
+.ai-pulse-text {
+  color: #4a00e0;
+  font-size: 0.9rem;
+  letter-spacing: 0.3px;
+  animation: text-pulse-animation 1.5s infinite ease-in-out;
+}
+
+@keyframes border-pulse {
+  0% {
+    border-color: rgba(138, 43, 226, 0.3);
+    box-shadow: 0 0 0 rgba(138, 43, 226, 0);
+  }
+  50% {
+    border-color: rgba(138, 43, 226, 0.6);
+    box-shadow: 0 0 8px rgba(138, 43, 226, 0.1);
+  }
+  100% {
+    border-color: rgba(138, 43, 226, 0.3);
+    box-shadow: 0 0 0 rgba(138, 43, 226, 0);
+  }
+}
+
+@keyframes text-pulse-animation {
+  0% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 2px rgba(138, 43, 226, 0.2);
+  }
+  100% {
+    opacity: 0.7;
+  }
+}

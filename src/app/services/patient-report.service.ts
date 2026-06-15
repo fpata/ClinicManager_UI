@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError, delay } from 'rxjs/operators';
 import { PatientReport } from '../models/patient-report.model';
 import { environment } from '../../environments/environment';
-  
+
 @Injectable({ providedIn: 'root' })
 export class PatientReportService {
   private apiUrl = `${environment.API_BASE_URL}/PatientReport`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -41,5 +42,17 @@ export class PatientReportService {
       params: { filePath },
       responseType: 'blob'
     });
-  } 
+  }
+
+  analyzeReport(filePath: string): Observable<{ reportName: string, doctorName?: string, reportDetails: string }> {
+    return this.http.post<{ reportName: string, doctorName?: string, reportDetails: string }>(
+      `${this.apiUrl}/analyze`,
+      { filePath },
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      catchError(error => {
+        console.warn('Real AI report analysis failed or backend endpoint not found. ', error);
+        throw error;
+      }));
+  }
 }

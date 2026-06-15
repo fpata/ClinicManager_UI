@@ -6,6 +6,8 @@ import { PatientTreatment } from '../models/patient-treatment.model';
 import { PatientVitals } from '../models/patient-vitals.model';
 import { PatientAppointment } from '../models/patient-appointment.model';
 import { PatientTreatmentDetail } from '../models/patient-treatment-detail.model';
+import { Payment } from '../models/payment.model';
+import { BillingRecord } from '../models/billing.model';
 
 @Injectable({
   providedIn: 'root'
@@ -340,6 +342,197 @@ export class PrintService {
 
     const html = this.getReportTemplate(config, htmlContent, clinicName);
     this.openPrintWindow(html, `Referral_Letter_${patientName}`);
+  }
+
+  printPaymentReceipt(payment: Payment, billingRecord: BillingRecord, config: AppConfig | null): void {
+    const formatCurrency = (val: number | undefined | null) => {
+      if (val === undefined || val === null) return '$0.00';
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
+    };
+
+    const formatDateTime = (dateStr: string | Date | undefined | null) => {
+      if (!dateStr) return 'N/A';
+      return new Date(dateStr).toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    };
+
+    const patientName = billingRecord.PatientName || 'N/A';
+    const clinicName = config?.ClinicName || 'Clinic Manager';
+
+    const htmlContent = `
+      <div style="text-align: center; margin-bottom: 25px;">
+        <h2 style="color: #0f766e; margin: 0; text-transform: uppercase; letter-spacing: 1px;">Payment Receipt</h2>
+        <div style="font-size: 14px; color: #64748b; margin-top: 5px;">Receipt No: #REC-${payment.PaymentID || 'TEMP'}</div>
+      </div>
+
+      <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 20px; background-color: #f8fafc; margin-bottom: 25px;">
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 14px;">
+          <div><strong style="color: #475569;">Patient Name:</strong> ${patientName} (ID: ${billingRecord.PatientID || 'N/A'})</div>
+          <div><strong style="color: #475569;">Payment Date:</strong> ${formatDateTime(payment.TransactionDate)}</div>
+          <div><strong style="color: #475569;">Doctor:</strong> ${billingRecord.DoctorName || 'N/A'}</div>
+          <div><strong style="color: #475569;">Payment Method:</strong> ${payment.PaymentMethod}</div>
+          <div><strong style="color: #475569;">Treatment:</strong> ${billingRecord.TreatmentName || 'N/A'}</div>
+          <div><strong style="color: #475569;">Reference #:</strong> ${payment.Reference || 'N/A'}</div>
+        </div>
+      </div>
+
+      <h3 style="color: #0f766e; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; margin-top: 25px;">Payment Details</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 15px;">
+        <thead>
+          <tr style="border-bottom: 2px solid #cbd5e1; background: #f8fafc; text-align: left; font-weight: 600; color: #475569;">
+            <th style="padding: 12px; border: 1px solid #e2e8f0;">Description</th>
+            <th style="padding: 12px; border: 1px solid #e2e8f0; text-align: right; width: 25%;">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 12px; border: 1px solid #e2e8f0;">Payment for treatment: ${billingRecord.TreatmentName || 'Medical Services'}</td>
+            <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: right; font-weight: 600; color: #16a34a;">${formatCurrency(payment.Amount)}</td>
+          </tr>
+          ${payment.Notes ? `
+            <tr>
+              <td colspan="2" style="padding: 12px; border: 1px solid #e2e8f0; font-size: 13px; color: #64748b; background-color: #fafafa;">
+                <strong>Notes:</strong> ${payment.Notes}
+              </td>
+            </tr>
+          ` : ''}
+        </tbody>
+      </table>
+
+      <div style="margin-top: 30px; border-top: 1px solid #cbd5e1; padding-top: 15px;">
+        <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;">
+          <span style="color: #64748b;">Billing Grand Total:</span>
+          <span style="font-weight: 600;">${formatCurrency(billingRecord.Total)}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;">
+          <span style="color: #64748b;">Total Paid to Date:</span>
+          <span style="font-weight: 600; color: #16a34a;">${formatCurrency(billingRecord.AmountPaid)}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: bold; background-color: #fef2f2; padding: 10px; border-radius: 6px; border: 1px solid #fee2e2;">
+          <span style="color: #991b1b;">Remaining Balance Due:</span>
+          <span style="color: #991b1b;">${formatCurrency(billingRecord.BalanceDue)}</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 60px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 50px;">
+        <div style="text-align: center;">
+          <div style="border-top: 1px solid #cbd5e1; padding-top: 8px; font-size: 12px; color: #64748b; margin-top: 40px;">Patient Signature</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="border-top: 1px solid #cbd5e1; padding-top: 8px; font-size: 12px; color: #64748b; margin-top: 40px;">Authorized Signature</div>
+        </div>
+      </div>
+    `;
+
+    const html = this.getReportTemplate(config, htmlContent, clinicName);
+    this.openPrintWindow(html, `Payment_Receipt_${patientName}_#${payment.PaymentID}`);
+  }
+
+  printPaymentHistory(billingRecord: BillingRecord, paymentList: Payment[], config: AppConfig | null): void {
+    const formatCurrency = (val: number | undefined | null) => {
+      if (val === undefined || val === null) return '$0.00';
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
+    };
+
+    const formatDate = (dateStr: string | Date | undefined | null) => {
+      if (!dateStr) return 'N/A';
+      return new Date(dateStr).toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    };
+
+    const patientName = billingRecord.PatientName || 'N/A';
+    const clinicName = config?.ClinicName || 'Clinic Manager';
+
+    const htmlContent = `
+      <div style="text-align: center; margin-bottom: 25px;">
+        <h2 style="color: #0f766e; margin: 0; text-transform: uppercase; letter-spacing: 1px;">Patient Payment History & Statement</h2>
+        <div style="font-size: 14px; color: #64748b; margin-top: 5px;">Statement Date: ${formatDate(new Date())}</div>
+      </div>
+
+      <!-- Patient & Doctor Details -->
+      <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 20px; background-color: #f8fafc; margin-bottom: 25px;">
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 14px;">
+          <div><strong style="color: #475569;">Patient Name:</strong> ${patientName} (ID: ${billingRecord.PatientID || 'N/A'})</div>
+          <div><strong style="color: #475569;">Doctor Name:</strong> ${billingRecord.DoctorName || 'N/A'}</div>
+          <div><strong style="color: #475569;">Treatment:</strong> ${billingRecord.TreatmentName || 'N/A'}</div>
+          <div><strong style="color: #475569;">Service Date:</strong> ${formatDate(billingRecord.ServiceDate)}</div>
+          <div><strong style="color: #475569;">Statement Status:</strong> <span style="font-weight: 600;">${billingRecord.Status || 'N/A'}</span></div>
+        </div>
+      </div>
+
+      <!-- Financial Summary Section -->
+      <h3 style="color: #0f766e; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; margin-top: 25px;">Billing Summary</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; margin-bottom: 25px;">
+        <tbody>
+          <tr style="border-bottom: 1px solid #cbd5e1;">
+            <td style="padding: 8px 12px; color: #475569;">Subtotal</td>
+            <td style="padding: 8px 12px; text-align: right;">${formatCurrency(billingRecord.Subtotal)}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #cbd5e1;">
+            <td style="padding: 8px 12px; color: #475569;">Tax</td>
+            <td style="padding: 8px 12px; text-align: right;">${formatCurrency(billingRecord.TaxTotal)}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #cbd5e1;">
+            <td style="padding: 8px 12px; color: #475569;">Discount</td>
+            <td style="padding: 8px 12px; text-align: right; color: #16a34a;">-${formatCurrency(billingRecord.DiscountTotal)}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #cbd5e1;">
+            <td style="padding: 8px 12px; color: #475569;">Adjustments</td>
+            <td style="padding: 8px 12px; text-align: right; color: ${billingRecord.AdjustmentTotal && billingRecord.AdjustmentTotal > 0 ? '#ef4444' : '#1e293b'};">${formatCurrency(billingRecord.AdjustmentTotal)}</td>
+          </tr>
+          <tr style="border-bottom: 2px solid #0f766e; background-color: #f8fafc; font-weight: bold;">
+            <td style="padding: 10px 12px; color: #0f766e;">Grand Total</td>
+            <td style="padding: 10px 12px; text-align: right; color: #0f766e; font-size: 15px;">${formatCurrency(billingRecord.Total)}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #cbd5e1; font-weight: 600;">
+            <td style="padding: 8px 12px; color: #16a34a;">Total Amount Paid</td>
+            <td style="padding: 8px 12px; text-align: right; color: #16a34a;">${formatCurrency(billingRecord.AmountPaid)}</td>
+          </tr>
+          <tr style="background-color: #fef2f2; font-weight: bold; font-size: 15px; border: 1px solid #fee2e2;">
+            <td style="padding: 10px 12px; color: #991b1b;">Balance Due</td>
+            <td style="padding: 10px 12px; text-align: right; color: #991b1b;">${formatCurrency(billingRecord.BalanceDue)}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Payment Transactions History Table -->
+      <h3 style="color: #0f766e; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; margin-top: 25px;">Transaction History</h3>
+      ${paymentList.length > 0 ? `
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px;">
+          <thead>
+            <tr style="border-bottom: 2px solid #cbd5e1; background: #f8fafc; text-align: left; font-weight: 600; color: #475569;">
+              <th style="padding: 10px; border: 1px solid #e2e8f0;">Date</th>
+              <th style="padding: 10px; border: 1px solid #e2e8f0;">Method</th>
+              <th style="padding: 10px; border: 1px solid #e2e8f0;">Reference / Check #</th>
+              <th style="padding: 10px; border: 1px solid #e2e8f0; text-align: right; width: 20%;">Amount</th>
+              <th style="padding: 10px; border: 1px solid #e2e8f0;">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${paymentList.map((pay: Payment) => `
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 10px; border: 1px solid #e2e8f0; white-space: nowrap;">${formatDate(pay.TransactionDate)}</td>
+                <td style="padding: 10px; border: 1px solid #e2e8f0;">${pay.PaymentMethod}</td>
+                <td style="padding: 10px; border: 1px solid #e2e8f0;"><code>${pay.Reference || '-'}</code></td>
+                <td style="padding: 10px; border: 1px solid #e2e8f0; text-align: right; font-weight: 600; color: #16a34a;">${formatCurrency(pay.Amount)}</td>
+                <td style="padding: 10px; border: 1px solid #e2e8f0; color: #64748b; font-size: 12px;">${pay.Notes || '-'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      ` : '<p style="font-size: 14px; color: #64748b; font-style: italic;">No payment transactions recorded.</p>'}
+    `;
+
+    const html = this.getReportTemplate(config, htmlContent, clinicName);
+    this.openPrintWindow(html, `Payment_Statement_${patientName}`);
   }
 
   private getReportTemplate(config: AppConfig | null, content: string, signOffName: string): string {

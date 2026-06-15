@@ -47,6 +47,11 @@
               <tr class="align-middle">
                 <td class="text-nowrap">
                   <span class="badge bg-info text-dark fs-7">{{appointment.StartDateTime | appDate:'mediumDate'}}</span>
+                  @if (appointment.ReminderSentDate) {
+                    <div class="mt-1 small text-muted" title="Last reminder sent on">
+                      <i class="bi bi-bell-fill text-warning me-1"></i>Reminded: {{appointment.ReminderSentDate | appDate:'short'}}
+                    </div>
+                  }
                 </td>
                 <td class="text-nowrap"><strong>{{appointment.StartTime}}</strong></td>
                 <td class="text-nowrap">{{appointment.EndTime}}</td>
@@ -61,7 +66,18 @@
                 </td>
                 @if (!isPatientRole) {
                 <td class="text-center">
-                  <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addAppointmentModal"
+                  @if (appointment.ID > 0) {
+                  <button class="btn btn-sm btn-outline-info" 
+                    [disabled]="sendingReminders.has(appointment.ID)"
+                    (click)="SendReminder(appointment.ID)" title="Send Reminder" type="button">
+                    @if (sendingReminders.has(appointment.ID)) {
+                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    } @else {
+                      <i class="bi bi-bell-fill"></i>
+                    }
+                  </button>
+                  }
+                  <button class="btn btn-sm btn-outline-primary ms-2" data-bs-toggle="modal" data-bs-target="#addAppointmentModal"
                     (click)="EditAppointment(appointment.ID)" title="Edit appointment" type="button">
                     <i class="bi bi-pencil-square"></i>
                   </button>
@@ -87,6 +103,11 @@
               <div class="col-6">
                 <small class="text-muted d-block">Date</small>
                 <strong>{{appointment.StartDateTime | appDate:'mediumDate'}}</strong>
+                @if (appointment.ReminderSentDate) {
+                  <span class="d-block small text-muted mt-1" title="Last reminder sent on">
+                    <i class="bi bi-bell-fill text-warning me-1"></i>Reminded: {{appointment.ReminderSentDate | appDate:'short'}}
+                  </span>
+                }
               </div>
               <div class="col-6">
                 <small class="text-muted d-block">Time</small>
@@ -106,6 +127,17 @@
               </div>
               @if (!isPatientRole) {
               <div class="col-12 pt-2 d-flex gap-2">
+                @if (appointment.ID > 0) {
+                <button class="btn btn-sm btn-outline-info flex-grow-1" 
+                  [disabled]="sendingReminders.has(appointment.ID)"
+                  (click)="SendReminder(appointment.ID)" type="button">
+                  @if (sendingReminders.has(appointment.ID)) {
+                    <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Sending...
+                  } @else {
+                    <i class="bi bi-bell-fill"></i> Reminder
+                  }
+                </button>
+                }
                 <button class="btn btn-sm btn-outline-primary flex-grow-1" data-bs-toggle="modal" 
                   data-bs-target="#addAppointmentModal"
                   (click)="EditAppointment(appointment.ID)" type="button">
