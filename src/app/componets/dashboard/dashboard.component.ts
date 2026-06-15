@@ -40,6 +40,7 @@ export class DashboardComponent implements OnInit, OnChanges {
    totalItems: number = 0;
    newAppointment: PatientAppointment | null = null;
    appointments: PatientAppointment[] = [];
+   sendingReminders = new Set<number>();
    selectedPatient: any | null = null;
    selectedDoctor: any | null = null;
    doctors: SearchModel[] | null = null;
@@ -574,6 +575,62 @@ export class DashboardComponent implements OnInit, OnChanges {
                console.error('Error deleting appointment:', error);
             }
          });
+      });
+   }
+
+   SendReminder(appointmentID: number) {
+      this.sendingReminders.add(appointmentID);
+      this.cdr.detectChanges();
+
+      this.patientAppointmentService.sendReminderEmail(appointmentID).subscribe({
+         next: (res) => {
+            this.sendingReminders.delete(appointmentID);
+            this.messageService.success(res?.Message || 'Reminder sent successfully.');
+            
+            // Update the ReminderSentDate locally so the UI reflects it immediately
+            const appointment = this.appointments.find(a => a.ID === appointmentID);
+            if (appointment) {
+               appointment.ReminderSentDate = res?.ReminderSentDate ? new Date(res.ReminderSentDate) : new Date();
+               
+               // Also update the global patient appointments in DataService if embedded
+               if (this.isEmbedded && this.patient) {
+                  this.patient.PatientAppointments = [...this.appointments];
+                  const user = this.dataService.getUser();
+                  if (user && user.Patients && user.Patients.length > 0) {
+                     const pIdx = user.Patients.findIndex((p: any) => p.ID === this.patient!.ID);
+                     if (pIdx > -1) {
+                        user.Patients[pIdx] = this.patient;
+                        this.dataService.setUser(user);
+                     }
+                  }
+               } else {
+                  // If not embedded, update the global data service user state if present
+                  try {
+                     const user: any = this.dataService.getUser();
+                     if (user && user.Patients && user.Patients.length) {
+                        const patient = user.Patients.find((p: any) => p.PatientAppointments?.some((a: any) => a.ID === appointmentID));
+                        if (patient && patient.PatientAppointments) {
+                           const aIdx = patient.PatientAppointments.findIndex((a: any) => a.ID === appointmentID);
+                           if (aIdx > -1) {
+                              patient.PatientAppointments[aIdx].ReminderSentDate = appointment.ReminderSentDate;
+                              this.dataService.setUser(user);
+                           }
+                        }
+                     }
+                  } catch (e) {
+                     // ignore
+                  }
+               }
+            }
+            this.cdr.detectChanges();
+         },
+         error: (err) => {
+            this.sendingReminders.delete(appointmentID);
+            const errorMsg = err?.error?.Message || err?.error || 'Failed to send reminder.';
+            this.messageService.error(errorMsg);
+            console.error('Error sending reminder:', err);
+            this.cdr.detectChanges();
+         }
       });
    }
 

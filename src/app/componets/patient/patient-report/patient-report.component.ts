@@ -29,6 +29,7 @@ export class PatientReportComponent extends PatientBaseComponent implements OnIn
   reports: PatientReport[] = [];
   newReport: PatientReport | null = null;
   patientId: number | null = null;
+  isAnalyzing = false;
 
   constructor(
     dataService: DataService,
@@ -95,6 +96,37 @@ export class PatientReportComponent extends PatientBaseComponent implements OnIn
     }
     this.newReport = null;
     this.patient.PatientReports = this.reports;
+  }
+
+  AnalyzeReport(): void {
+    if (!this.newReport || !this.newReport.ReportFilePath) {
+      this.messageService.error('Please upload a report file first before starting AI analysis.');
+      return;
+    }
+
+    this.isAnalyzing = true;
+    this.cdr.markForCheck();
+
+    this.reportService.analyzeReport(this.newReport.ReportFilePath).subscribe({
+      next: (result) => {
+        this.isAnalyzing = false;
+        if (this.newReport) {
+          this.newReport.ReportName = result.reportName;
+          this.newReport.ReportDetails = result.reportDetails;
+          if (result.doctorName) {
+            this.newReport.DoctorName = result.doctorName;
+          }
+        }
+        this.messageService.success('AI analysis completed successfully. Form fields have been populated.');
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        this.isAnalyzing = false;
+        console.error('AI analysis error:', err);
+        this.messageService.error('AI analysis failed. Please manually fill the report details.');
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   getDoctors = (name: string): Observable<SearchModel[]> => {

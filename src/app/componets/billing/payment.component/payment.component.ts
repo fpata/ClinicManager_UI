@@ -9,6 +9,7 @@ import { BillingService } from '../../../services/blling.service';
 import { PaymentService } from '../../../services/payment.service';
 import { MessageService } from '../../../services/message.service';
 import { DataService } from '../../../services/data.service';
+import { PrintService } from '../../../services/print.service';
 
 @Component({
   selector: 'app-payment',
@@ -32,7 +33,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
     private paymentService: PaymentService,
     private messageService: MessageService,
     private cdr: ChangeDetectorRef,
-    private dataService: DataService
+    private dataService: DataService,
+    private printService: PrintService
   ) { }
 
   ngOnInit(): void {
@@ -149,6 +151,20 @@ export class PaymentComponent implements OnInit, OnDestroy {
       });
     }
     this.cdr.markForCheck();
+  }
+
+  PrintReceipt(pay: Payment): void {
+    if (!this.billingRecord) return;
+    const config = this.dataService.getConfig();
+    this.printService.printPaymentReceipt(pay, this.billingRecord, config);
+    this.messageService.success('Payment receipt print view loaded.');
+  }
+
+  PrintFullHistory(): void {
+    if (!this.billingRecord || this.paymentList.length === 0) return;
+    const config = this.dataService.getConfig();
+    this.printService.printPaymentHistory(this.billingRecord, this.paymentList, config);
+    this.messageService.success('Payment statement print view loaded.');
   }
 
   ClearSelectedRecord(): void {

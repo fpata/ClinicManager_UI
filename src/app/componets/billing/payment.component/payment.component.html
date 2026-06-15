@@ -101,10 +101,15 @@
 
         <!-- Payment History Card -->
         <div class="card border-0 shadow-sm rounded-3">
-          <div class="card-header bg-transparent border-0 pt-4 px-4">
+          <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex align-items-center justify-content-between">
             <h5 class="fw-bold mb-0 text-dark">
               <i class="bi bi-clock-history me-2 text-primary"></i>Payment History
             </h5>
+            @if (paymentList.length > 0) {
+            <button type="button" class="btn btn-sm btn-outline-primary" (click)="PrintFullHistory()" title="Print Statement">
+              <i class="bi bi-printer me-1"></i> Print Statement
+            </button>
+            }
           </div>
           <div class="card-body px-4 pb-4">
             @if (paymentList.length === 0) {
@@ -123,6 +128,7 @@
                     <th>Reference</th>
                     <th class="text-end">Amount</th>
                     <th>Notes</th>
+                    <th class="text-center" style="width: 110px;">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -134,8 +140,13 @@
                     </td>
                     <td><code class="text-dark">{{ pay.Reference || 'N/A' }}</code></td>
                     <td class="text-end fw-bold text-success">{{ pay.Amount | currency }}</td>
-                    <td class="text-muted small text-truncate" style="max-width: 150px;" [title]="pay.Notes || ''">{{
+                    <td class="text-muted small text-truncate" style="max-width: 120px;" [title]="pay.Notes || ''">{{
                       pay.Notes || '-' }}</td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-sm btn-outline-secondary py-1 px-2" (click)="PrintReceipt(pay)" title="Print Receipt">
+                        <i class="bi bi-printer me-1"></i>Receipt
+                      </button>
+                    </td>
                   </tr>
                   }
                 </tbody>
@@ -146,9 +157,14 @@
             <div class="d-md-none cards-view">
               @for (pay of paymentList; track pay.PaymentID) {
               <div class="result-card p-3 border-start-success">
-                <div class="d-flex justify-content-between mb-2">
+                <div class="d-flex justify-content-between align-items-center mb-2">
                   <span class="fw-bold text-dark">{{ pay.TransactionDate | appDate:'mediumDate' }}</span>
-                  <span class="fw-bold text-success">{{ pay.Amount | currency }}</span>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="fw-bold text-success">{{ pay.Amount | currency }}</span>
+                    <button type="button" class="btn btn-sm btn-outline-secondary p-1 lh-1" (click)="PrintReceipt(pay)" title="Print Receipt">
+                      <i class="bi bi-printer"></i>
+                    </button>
+                  </div>
                 </div>
                 <div class="info-row py-1">
                   <span class="info-label">Method:</span>

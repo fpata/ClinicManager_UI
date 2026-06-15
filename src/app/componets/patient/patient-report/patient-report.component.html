@@ -123,7 +123,7 @@
           </div>
           <div class="col">
             <input type="date" id="txtReportDate" class="form-control" min="2024-01-01" max="2030-12-31"
-              [ngModel]="this.newReport?.ReportDate" (ngModelChange)="newReport.ReportDate = $event">
+              [ngModel]="this.newReport?.ReportDate" (ngModelChange)="newReport.ReportDate = $event" [disabled]="isAnalyzing">
           </div>
         </div>
         <br />
@@ -133,7 +133,7 @@
           </div>
           <div class="col">
             <input type="text" id="txtReportName" class="form-control" [ngModel]="this.newReport?.ReportName"
-              (ngModelChange)="newReport.ReportName = $event">
+              (ngModelChange)="newReport.ReportName = $event" [disabled]="isAnalyzing">
           </div>
         </div>
         <br />
@@ -142,9 +142,11 @@
             <label for="txtDoctorName" class="form-label">Doctor Name</label>
           </div>
           <div class="col">
-            <app-typeahead [minLength]="2" [debounce]="300" [searchFn]="getDoctors" [displayWith]="displayName"
-              (selectItem)="newReport.DoctorID = $event.UserID; newReport.DoctorName = $event.FirstName + ' ' + $event.LastName">
-            </app-typeahead>
+            <fieldset [disabled]="isAnalyzing">
+              <app-typeahead [minLength]="2" [debounce]="300" [searchFn]="getDoctors" [displayWith]="displayName"
+                (selectItem)="newReport.DoctorID = $event.UserID; newReport.DoctorName = $event.FirstName + ' ' + $event.LastName">
+              </app-typeahead>
+            </fieldset>
           </div>
         </div>
         <br />
@@ -154,16 +156,53 @@
           </div>
           <div class="col">
             <textarea type="text" id="txtReportFinding" class="form-control" rows="2"
-              [ngModel]="this.newReport?.ReportDetails" (ngModelChange)="newReport.ReportDetails = $event"></textarea>
+              [ngModel]="this.newReport?.ReportDetails" (ngModelChange)="newReport.ReportDetails = $event" [disabled]="isAnalyzing"></textarea>
           </div>
         </div>
         <br />
         <div class="row">
           <div class="col-12">
-            <app-file-upload (uploadComplete)="onFileUploaded($event)"></app-file-upload>
+            <fieldset [disabled]="isAnalyzing">
+              <app-file-upload (uploadComplete)="onFileUploaded($event)"></app-file-upload>
+            </fieldset>
           </div>
         </div>
         <br />
+
+        @if (newReport?.ReportFilePath) {
+        <div class="row align-items-center justify-content-between p-2 mx-1 border rounded bg-light-purple mb-3">
+          <div class="col-sm-8 text-start p-1">
+            <span class="badge bg-success mb-1">File Attached</span>
+            <p class="mb-0 text-muted small truncate-text" title="{{ newReport?.ReportFilePath }}">
+              {{ newReport?.ReportFilePath }}
+            </p>
+          </div>
+          <div class="col-sm-4 text-end p-1">
+            <button type="button" class="btn btn-ai btn-sm w-100" [disabled]="isAnalyzing" (click)="AnalyzeReport()">
+              @if (isAnalyzing) {
+                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                Scanning...
+              } @else {
+                <i class="bi bi-cpu-fill me-1"></i> Scan with AI
+              }
+            </button>
+          </div>
+        </div>
+        }
+
+        @if (isAnalyzing) {
+        <div class="row mb-3">
+          <div class="col-12">
+            <div class="ai-processing-loader p-3 text-center border rounded">
+              <div class="spinner-grow text-purple mb-2" role="status">
+                <span class="visually-hidden">Analyzing Document...</span>
+              </div>
+              <div class="ai-pulse-text fw-medium">AI is scanning document findings & extracting information...</div>
+            </div>
+          </div>
+        </div>
+        }
+
         <div>
           <input type="hidden" id="hdReportId" value="" />
         </div>
