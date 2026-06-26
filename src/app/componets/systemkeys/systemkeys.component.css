@@ -1,0 +1,58 @@
+/* Custom styles for System Keys component */
+
+.list-group-item {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border) !important;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.list-group-item:hover {
+  background-color: var(--surface);
+  transform: translateX(4px);
+}
+
+/* Selected active key item styling */
+.list-group-item.active-key-item {
+  background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%) !important;
+  border-color: var(--primary-700) !important;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.list-group-item.active-key-item .key-name-text {
+  color: #ffffff !important;
+}
+
+.list-group-item.active-key-item .text-muted {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.list-group-item.active-key-item i {
+  color: #ffffff !important;
+}
+
+.transition-all {
+  transition: all var(--transition-fast) ease-in-out;
+}
+
+.letter-spacing-1 {
+  letter-spacing: 1px;
+}
+
+.max-width-350 {
+  max-width: 350px;
+}
+
+/* Custom scrollbar for key list */
+.keys-list-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.keys-list-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.keys-list-container::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 3px;
+}

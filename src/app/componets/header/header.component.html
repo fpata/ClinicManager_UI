@@ -57,8 +57,7 @@
           </a>
         </li>
         <li class="nav-item" *ngIf="showConfigLink">
-          <a class="nav-link px-3 rounded-pill transition-all" href="/appconfig" id="navAppConfig"
-            routerLink="/appconfig" routerLinkActive="active" (click)="hideAllSubnavs()">
+          <a class="nav-link px-3 rounded-pill transition-all" routerLink="/appconfig" routerLinkActive="active" id="navAppConfig" role="button">
             <i class="bi bi-gear me-2"></i>Configuration
           </a>
         </li>
@@ -218,6 +217,24 @@
       <li class="nav-item">
         <a class="nav-link" id="navClinicalReports" routerLink="/reports/clinical" routerLinkActive="active">
           <i class="bi bi-file-earmark-medical me-1"></i>Clinical Reports
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Configuration Sub-navbar (placed below main navbar) -->
+<div *ngIf="showConfigSubnav && !isLoginURL" class="w-100 bg-white shadow-sm subnav">
+  <div class="container-fluid">
+    <ul class="nav py-2">
+      <li class="nav-item">
+        <a class="nav-link" id="navGeneralConfig" routerLink="/appconfig" routerLinkActive="active">
+          <i class="bi bi-sliders2 me-1"></i>General Settings
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="navSystemKeys" routerLink="/systemkeys" routerLinkActive="active">
+          <i class="bi bi-key me-1"></i>System Keys
         </a>
       </li>
     </ul>

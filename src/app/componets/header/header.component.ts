@@ -36,6 +36,7 @@ export class Header implements OnInit, OnDestroy {
   showUserSubnav = false;
   showBillingSubnav = false;
   showReportsSubnav = false;
+  showConfigSubnav = false;
   constructor(
     private dataService: DataService,
     private router: Router,
@@ -223,6 +224,7 @@ export class Header implements OnInit, OnDestroy {
     this.showUserSubnav = false;
     this.showBillingSubnav = false;
     this.showReportsSubnav = false;
+    this.showConfigSubnav = false;
     this.cdr.markForCheck();
   }
 
@@ -232,7 +234,16 @@ export class Header implements OnInit, OnDestroy {
       this.patientId = Number(match[1]);
     }
 
-    if (url.includes('/dashboard') || url.includes('/doctorAppointments') || url.includes('/appconfig') || url === '/' || url === '') {
+    if (url.includes('/dashboard') || url.includes('/doctorAppointments') || url === '/' || url === '') {
+      this.showUserSubnav = false;
+      this.showBillingSubnav = false;
+      this.showReportsSubnav = false;
+      this.showConfigSubnav = false;
+      if (!this.isPatientRole) {
+        this.showPatientSubnav = false;
+      }
+    } else if (url.includes('/appconfig') || url.includes('/systemkeys')) {
+      this.showConfigSubnav = true;
       this.showUserSubnav = false;
       this.showBillingSubnav = false;
       this.showReportsSubnav = false;
@@ -243,6 +254,7 @@ export class Header implements OnInit, OnDestroy {
       this.showUserSubnav = true;
       this.showBillingSubnav = false;
       this.showReportsSubnav = false;
+      this.showConfigSubnav = false;
       if (!this.isPatientRole) {
         this.showPatientSubnav = false;
       }
@@ -251,10 +263,12 @@ export class Header implements OnInit, OnDestroy {
       this.showUserSubnav = false;
       this.showBillingSubnav = false;
       this.showReportsSubnav = false;
+      this.showConfigSubnav = false;
     } else if (url.includes('/billing')) {
       this.showBillingSubnav = true;
       this.showUserSubnav = false;
       this.showReportsSubnav = false;
+      this.showConfigSubnav = false;
       if (!this.isPatientRole) {
         this.showPatientSubnav = false;
       }
@@ -262,6 +276,7 @@ export class Header implements OnInit, OnDestroy {
       this.showReportsSubnav = true;
       this.showUserSubnav = false;
       this.showBillingSubnav = false;
+      this.showConfigSubnav = false;
       if (!this.isPatientRole) {
         this.showPatientSubnav = false;
       }
@@ -297,6 +312,7 @@ export class Header implements OnInit, OnDestroy {
       this.showUserSubnav = false;
       this.showBillingSubnav = false;
       this.showReportsSubnav = false;
+      this.showConfigSubnav = false;
     }
     this.cdr.markForCheck();
   }
@@ -308,6 +324,7 @@ export class Header implements OnInit, OnDestroy {
       this.showPatientSubnav = false;
       this.showBillingSubnav = false;
       this.showReportsSubnav = false;
+      this.showConfigSubnav = false;
     }
     this.cdr.markForCheck();
   }
@@ -319,6 +336,7 @@ export class Header implements OnInit, OnDestroy {
       this.showPatientSubnav = false;
       this.showUserSubnav = false;
       this.showReportsSubnav = false;
+      this.showConfigSubnav = false;
     }
     this.cdr.markForCheck();
   }
@@ -330,6 +348,19 @@ export class Header implements OnInit, OnDestroy {
       this.showPatientSubnav = false;
       this.showUserSubnav = false;
       this.showBillingSubnav = false;
+      this.showConfigSubnav = false;
+    }
+    this.cdr.markForCheck();
+  }
+
+  toggleConfigSubnav(event: Event): void {
+    event.preventDefault();
+    this.showConfigSubnav = !this.showConfigSubnav;
+    if (this.showConfigSubnav) {
+      this.showPatientSubnav = false;
+      this.showUserSubnav = false;
+      this.showBillingSubnav = false;
+      this.showReportsSubnav = false;
     }
     this.cdr.markForCheck();
   }

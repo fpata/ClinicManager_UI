@@ -1,0 +1,187 @@
+<div class="page-container">
+  <!-- Page Header -->
+  <div class="page-header mb-4">
+    <div class="header-content">
+      <h1 class="page-title mb-1">
+        <i class="bi bi-key-fill me-2 text-primary"></i>System Keys Configuration
+      </h1>
+      <p class="page-subtitle">Manage secure encryption keys, API credentials, and integration secrets</p>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row g-4">
+      
+      <!-- Left Panel: List of keys -->
+      <div class="col-lg-4 col-md-5">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-header bg-transparent border-bottom-2 d-flex justify-content-between align-items-center py-3">
+            <h5 class="m-0 fw-bold"><i class="bi bi-list-ul me-2 text-secondary"></i>Keys List</h5>
+            <button class="btn btn-sm btn-primary rounded-pill" (click)="addNewKey()" [disabled]="mode === 'create'">
+              <i class="bi bi-plus-lg me-1"></i>Add New
+            </button>
+          </div>
+          
+          <div class="card-body p-3">
+            <!-- Search Filter -->
+            <div class="input-group mb-3">
+              <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control border-start-0" placeholder="Filter keys..." [(ngModel)]="searchTerm">
+            </div>
+
+            <!-- List -->
+            <div class="keys-list-container" style="max-height: 550px; overflow-y: auto;">
+              <div *ngIf="filteredKeys.length === 0" class="empty-state p-4 text-center">
+                <i class="bi bi-key text-muted fs-2 mb-2"></i>
+                <p class="text-secondary mb-0">No system keys found</p>
+              </div>
+
+              <div class="list-group list-group-flush" *ngIf="filteredKeys.length > 0">
+                <button *ngFor="let key of filteredKeys" 
+                        type="button" 
+                        class="list-group-item list-group-item-action border-0 rounded-3 mb-2 p-3 transition-all d-flex justify-content-between align-items-center"
+                        [class.active-key-item]="selectedKey?.ID === key.ID"
+                        (click)="selectKey(key)"
+                        [disabled]="mode === 'create' || mode === 'edit'">
+                  <div class="text-start text-truncate me-2">
+                    <div class="fw-bold key-name-text text-truncate">{{ key.KeyName }}</div>
+                    <small class="text-muted text-monospace font-monospace">{{ key.KeyValue }}</small>
+                  </div>
+                  <i class="bi bi-chevron-right text-muted"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel: Single active configuration display & form -->
+      <div class="col-lg-8 col-md-7">
+        <!-- View Mode Details Card -->
+        <div class="card shadow-sm border-0 h-100" *ngIf="mode === 'view' && selectedKey">
+          <div class="card-header bg-transparent border-bottom-2 d-flex justify-content-between align-items-center py-3">
+            <h5 class="m-0 fw-bold"><i class="bi bi-file-earmark-lock2 me-2 text-secondary"></i>Configuration Details</h5>
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline-primary" (click)="editKey()">
+                <i class="bi bi-pencil me-1"></i>Edit
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteKey()">
+                <i class="bi bi-trash me-1"></i>Delete
+              </button>
+            </div>
+          </div>
+
+          <div class="card-body p-4">
+            <div class="details-section mb-4">
+              <div class="detail-row mb-3">
+                <div class="text-uppercase font-monospace text-muted small letter-spacing-1">Key Name</div>
+                <h4 class="fw-bold text-primary m-0 mt-1">{{ selectedKey.KeyName }}</h4>
+              </div>
+
+              <div class="detail-row mb-4">
+                <div class="text-uppercase font-monospace text-muted small letter-spacing-1">Key Value (Secret)</div>
+                <div class="d-flex align-items-center gap-2 mt-2">
+                  <span class="fs-4 text-secondary font-monospace">{{ selectedKey.KeyValue }}</span>
+                  <span class="badge bg-secondary-500 text-white rounded-pill px-2 py-1 small"><i class="bi bi-shield-lock me-1"></i>Encrypted in DB</span>
+                </div>
+              </div>
+            </div>
+
+            <hr class="my-4 border-light">
+
+            <!-- System Metadata Info Cards -->
+            <div class="row g-3">
+              <div class="col-sm-6">
+                <div class="card bg-light border-0 p-3 rounded-3">
+                  <div class="text-muted small"><i class="bi bi-calendar-plus me-1"></i>Created Date</div>
+                  <div class="fw-semibold mt-1">{{ selectedKey.CreatedDate | date:'medium' }}</div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="card bg-light border-0 p-3 rounded-3">
+                  <div class="text-muted small"><i class="bi bi-calendar-check me-1"></i>Modified Date</div>
+                  <div class="fw-semibold mt-1">{{ selectedKey.ModifiedDate | date:'medium' }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit/Create Mode Form Card -->
+        <div class="card shadow-sm border-0 h-100" *ngIf="mode === 'edit' || mode === 'create'">
+          <div class="card-header bg-transparent border-bottom-2 py-3">
+            <h5 class="m-0 fw-bold">
+              <i class="bi" [class.bi-plus-circle-fill]="mode === 'create'" [class.bi-pencil-square]="mode === 'edit'"></i>
+              {{ mode === 'create' ? 'Add New System Key' : 'Edit System Key: ' + selectedKey?.KeyName }}
+            </h5>
+          </div>
+
+          <div class="card-body p-4">
+            <form (ngSubmit)="saveKey()" #keyForm="ngForm">
+              <!-- Key Name Field -->
+              <div class="form-group mb-4">
+                <label for="keyNameInput" class="form-label">
+                  <i class="bi bi-tag-fill me-1"></i>Key Name
+                </label>
+                <input type="text" 
+                       id="keyNameInput" 
+                       class="form-control form-control-lg" 
+                       placeholder="e.g. WhatsAppAPIKey"
+                       name="keyName"
+                       [(ngModel)]="formKeyName"
+                       required
+                       [disabled]="isSaving"
+                       maxlength="100">
+                <div class="form-text text-muted">
+                  Unique name identifying this key in services.
+                </div>
+              </div>
+
+              <!-- Key Value Field -->
+              <div class="form-group mb-4">
+                <label for="keyValueInput" class="form-label">
+                  <i class="bi bi-lock-fill me-1"></i>Key Value (Secret)
+                </label>
+                <input type="password" 
+                       id="keyValueInput" 
+                       class="form-control form-control-lg" 
+                       [placeholder]="mode === 'edit' ? 'Leave blank to keep existing value, or enter new secret' : 'Enter secret value'"
+                       name="keyValue"
+                       [(ngModel)]="formKeyValue"
+                       [required]="mode === 'create'"
+                       [disabled]="isSaving">
+                <div class="form-text text-muted" *ngIf="mode === 'edit'">
+                  For security, the current value is stored encrypted. Enter a value here only if you wish to overwrite it.
+                </div>
+              </div>
+
+              <!-- Form Buttons -->
+              <div class="button-group pt-4 border-top">
+                <button type="button" class="btn btn-outline-secondary px-4 me-2" (click)="cancel()" [disabled]="isSaving">
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary px-4 d-flex align-items-center gap-2" [disabled]="isSaving || !keyForm.valid">
+                  <span *ngIf="isSaving" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <i class="bi bi-save" *ngIf="!isSaving"></i>
+                  Save Configuration
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- No Key Selection Fallback -->
+        <div class="card shadow-sm border-0 h-100 bg-light justify-content-center align-items-center p-5 text-center" *ngIf="!selectedKey && mode === 'view'">
+          <div class="empty-state">
+            <i class="bi bi-shield-lock-fill text-muted fs-1 mb-3"></i>
+            <h4 class="fw-bold">No Key Selected</h4>
+            <p class="text-secondary max-width-350">Select a configuration key from the list to view details, edit, or create a new system key.</p>
+            <button class="btn btn-primary mt-3" (click)="addNewKey()"><i class="bi bi-plus-lg me-1"></i>Create First Key</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -25,6 +25,7 @@ import { PatientReportComponent } from './componets/patient/patient-report/patie
 import { FinancialReportsComponent } from './componets/reports/financial-reports/financial-reports.component';
 import { AppointmentReportsComponent } from './componets/reports/appointment-reports/appointment-reports.component';
 import { ClinicalReportsComponent } from './componets/reports/clinical-reports/clinical-reports.component';
+import { SystemkeysComponent } from './componets/systemkeys/systemkeys.component';
 
 
 export const routes: Routes = [
@@ -76,6 +77,7 @@ export const routes: Routes = [
     ]
   },
   { path: 'appconfig', component: AppconfigComponent, canActivate: [authGuard], data: { expectedRoles: ['Admin', 'Administrator', 'Doctor'] } },
+  { path: 'systemkeys', component: SystemkeysComponent, canActivate: [authGuard], data: { expectedRoles: ['Admin', 'Administrator', 'Doctor'] } },
   {
     path: 'reports',
     canActivate: [authGuard],
