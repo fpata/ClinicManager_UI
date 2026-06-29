@@ -1,12 +1,9 @@
 {
-  "routes": [
-    {
-      "route": "https://mango-moss-096327200.7.azurestaticapps.net/login",
-      "methods": [
-        "get"
-      ],
-      "redirect": "https://mango-moss-096327200.7.azurestaticapps.net",
-      "statusCode": 200
-    }
-  ]
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": [
+      "/assets/**/*",
+      "/*.{js,css,png,jpg,jpeg,gif,ico,svg,woff,woff2,ttf,json}"
+    ]
+  }
 }
