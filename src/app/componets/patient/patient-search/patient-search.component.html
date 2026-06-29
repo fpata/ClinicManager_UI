@@ -146,13 +146,13 @@
             <thead>
               <tr>
                 <th class="text-center" style="width: 50px;" data-bs-toggle="tooltip" 
-                    title="Add New Procedure"><i class="bi bi-plus-circle me-1"></i>Add</th>
+                    title="Start Patient Session"><i class="bi bi-plus-circle me-1"></i>Add</th>
                 <th class="text-center" style="width: 50px;" data-bs-toggle="tooltip" 
-                    title="Edit Last Procedure"><i class="bi bi-pencil-square me-1"></i>Edit</th>
+                    title="Open Patient Profile"><i class="bi bi-pencil-square me-1"></i>Edit</th>
                 <th class="text-center" style="width: 50px;" data-bs-toggle="tooltip" 
-                    title="Quick Create New Procedure"><i class="bi bi-lightning-fill me-1"></i>Quick</th>
+                    title="Quick Register Patient"><i class="bi bi-lightning-fill me-1"></i>Quick</th>
                 <th class="text-center" style="width: 50px;" data-bs-toggle="tooltip" 
-                    title="Delete Patient"><i class="bi bi-trash3 me-1"></i>Delete</th>
+                    title="Delete Patient Record"><i class="bi bi-trash3 me-1"></i>Delete</th>
                 <th data-bs-toggle="tooltip" 
                     title="First Name"><i class="bi bi-person me-1"></i>First Name</th>
                 <th data-bs-toggle="tooltip" 
@@ -174,25 +174,25 @@
               <tr class="table-row-hover">
                 <td class="text-center">
                   <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" 
-                    title="Add New Procedure" (click)="AddNewPatient(result,false)">
+                    title="Start Patient Session" (click)="AddNewPatient(result,false)">
                     <i class="bi bi-person-fill-add"></i>
                   </button>
                 </td>
                 <td class="text-center">
                   <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" 
-                    title="Update Last Procedure" (click)="UpdatePatient(result)">
+                    title="Open Patient Profile" (click)="UpdatePatient(result)">
                     <i class="bi bi-pencil-square"></i>
                   </button>
                 </td>
                 <td class="text-center">
                   <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip" 
-                    title="Quick Create New Procedure" (click)="AddNewPatient(result,true)">
+                    title="Quick Register Patient" (click)="AddNewPatient(result,true)">
                     <i class="bi bi-lightning-fill"></i>
                   </button>
                 </td>
                 <td class="text-center">
                   <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" 
-                    title="Delete Patient" (click)="DeletePatient(result)">
+                    title="Delete Patient Record" (click)="DeletePatient(result)">
                     <i class="bi bi-trash3"></i>
                   </button>
                 </td>

@@ -365,6 +365,18 @@ export class Header implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
+  clearActivePatientContext(event?: Event): void {
+    if (event) {
+      event.preventDefault();
+    }
+    this.dataService.setUser(null);
+    this.dataService.setUserId(0);
+    this.patient = null;
+    this.patientId = null;
+    this.router.navigate(['/patient/search']);
+    this.cdr.markForCheck();
+  }
+
   toggleTheme(): void {
     this.isDarkTheme = !this.isDarkTheme;
     try {

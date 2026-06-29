@@ -2,10 +2,11 @@ import { Component,ChangeDetectionStrategy } from '@angular/core';
 import { MessageService } from '../../../services/message.service';
 import { FormsModule } from '@angular/forms';
 import { UtilityService } from '../../../services/utility.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-forgotpassword.component',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterModule],
   templateUrl: './forgotpassword.component.html',
   styleUrl: './forgotpassword.component.css',
   standalone: true,

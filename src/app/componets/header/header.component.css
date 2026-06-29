@@ -266,3 +266,33 @@
   padding-bottom: calc(0.6rem - 3px);
   font-weight: 700;
 }
+
+.subnav .nav-link.disabled {
+  color: var(--muted) !important;
+  pointer-events: none;
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.subnav .nav-link.disabled i {
+  color: var(--muted) !important;
+}
+
+/* Active Patient Context Badge */
+.active-patient-badge {
+  border-color: var(--border) !important;
+  background-color: var(--card-bg) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.bg-warning-light {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+}
+
+.border-warning-subtle {
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+body.theme-dark .active-patient-badge {
+  background-color: var(--bg-secondary) !important;
+}
