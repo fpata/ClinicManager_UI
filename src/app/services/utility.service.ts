@@ -41,17 +41,24 @@ export class UtilityService {
     const ampm = hour24 >= 12 ? 'PM' : 'AM';
     const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
 
-    // Replace longer tokens first to avoid partial collisions
-    return pattern
-      .replace(/yyyy/g, year.toString())
-      .replace(/MM/g, this.pad(month))
-      .replace(/dd/g, this.pad(day))
-      .replace(/HH/g, this.pad(hour24))
-      .replace(/hh/g, this.pad(hour12))
-      .replace(/h/g, hour12.toString())
-      .replace(/mm/g, this.pad(minutes))
-      .replace(/ss/g, this.pad(seconds))
-      .replace(/tt/g, ampm);
+    const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const longMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    const replacements: { [key: string]: string } = {
+      'yyyy': year.toString(),
+      'MMMM': longMonths[date.getMonth()],
+      'MMM': shortMonths[date.getMonth()],
+      'MM': this.pad(month),
+      'dd': this.pad(day),
+      'HH': this.pad(hour24),
+      'hh': this.pad(hour12),
+      'h': hour12.toString(),
+      'mm': this.pad(minutes),
+      'ss': this.pad(seconds),
+      'tt': ampm
+    };
+
+    return pattern.replace(/yyyy|MMMM|MMM|MM|dd|HH|hh|h|mm|ss|tt/g, (match) => replacements[match]);
   }
 
   formatDate(dateInput: Date | string | number, dateformat?: string | null): string {
