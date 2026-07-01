@@ -94,13 +94,13 @@
               <div class="col-sm-6">
                 <div class="card bg-light border-0 p-3 rounded-3">
                   <div class="text-muted small"><i class="bi bi-calendar-plus me-1"></i>Created Date</div>
-                  <div class="fw-semibold mt-1">{{ selectedKey.CreatedDate | date:'medium' }}</div>
+                  <div class="fw-semibold mt-1">{{ selectedKey.CreatedDate | appDate:'short' }}</div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="card bg-light border-0 p-3 rounded-3">
                   <div class="text-muted small"><i class="bi bi-calendar-check me-1"></i>Modified Date</div>
-                  <div class="fw-semibold mt-1">{{ selectedKey.ModifiedDate | date:'medium' }}</div>
+                  <div class="fw-semibold mt-1">{{ selectedKey.ModifiedDate | appDate:'short' }}</div>
                 </div>
               </div>
             </div>

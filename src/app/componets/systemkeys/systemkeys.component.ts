@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { SystemKeyService } from '../../services/systemkey.service';
 import { SystemKey } from '../../models/systemkey.model';
 import { MessageService } from '../../services/message.service';
+import { AppDatePipe } from '../../common/app-date.pipe';
 
 @Component({
   selector: 'app-systemkeys',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AppDatePipe],
   templateUrl: './systemkeys.component.html',
   styleUrl: './systemkeys.component.css'
 })

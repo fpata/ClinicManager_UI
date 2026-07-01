@@ -206,7 +206,7 @@
                   <a href="tel:{{result.PrimaryPhone}}" class="link-phone">{{result.PrimaryPhone}}</a>
                 </td>
                 <td>{{result.LastTreatmentName}}</td>
-                <td>{{result.LastTreatmentDate}}</td>
+                <td>{{result.LastTreatmentDate | appDate}}</td>
               </tr>
               }
               @if (searchResult === undefined || searchResult.Results.length == 0) {

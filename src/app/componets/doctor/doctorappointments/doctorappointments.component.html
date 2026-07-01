@@ -217,7 +217,7 @@
                           @if (appointment.ReminderSentDate) {
                             <div class="d-flex align-items-center justify-content-center gap-2">
                               <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1.5" 
-                                    [title]="'Sent on ' + (appointment.ReminderSentDate | date:'medium')">
+                                    [title]="'Sent on ' + (appointment.ReminderSentDate | appDate:'short')">
                                 <i class="bi bi-check-all me-1"></i>Sent
                               </span>
                               <button class="btn btn-sm btn-link p-0 text-secondary" (click)="SendReminderEmail(appointment)" title="Resend Reminder">
@@ -230,8 +230,8 @@
                             </button>
                           }
                         </td>
-                        <td>{{appointment.StartDateTime}}</td>
-                        <td>{{appointment.EndDateTime}}</td>
+                        <td>{{appointment.StartDateTime | appDate:'short'}}</td>
+                        <td>{{appointment.EndDateTime | appDate:'short'}}</td>
                         <td class="fw-medium">{{appointment.PatientName}}</td>
                         <td>{{appointment.TreatmentName}}</td>
                         <td>{{appointment.DoctorName}}</td>
@@ -276,11 +276,11 @@
                   <div class="card-body-custom">
                     <div class="info-row">
                       <span class="info-label"><i class="bi bi-calendar-event me-1"></i>Start:</span>
-                      <span class="info-value">{{appointment.StartDateTime}}</span>
+                      <span class="info-value">{{appointment.StartDateTime | appDate:'short'}}</span>
                     </div>
                     <div class="info-row">
                       <span class="info-label"><i class="bi bi-calendar-check me-1"></i>End:</span>
-                      <span class="info-value">{{appointment.EndDateTime}}</span>
+                      <span class="info-value">{{appointment.EndDateTime | appDate:'short'}}</span>
                     </div>
                     <div class="info-row">
                       <span class="info-label"><i class="bi bi-activity me-1"></i>Treatment:</span>
@@ -296,7 +296,7 @@
                         @if (appointment.ReminderSentDate) {
                           <div class="d-flex align-items-center gap-2">
                             <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"
-                                  [title]="'Last sent: ' + (appointment.ReminderSentDate | date:'medium')">
+                                  [title]="'Last sent: ' + (appointment.ReminderSentDate | appDate:'short')">
                               <i class="bi bi-check-all me-1"></i>Sent
                             </span>
                             <button class="btn btn-sm btn-link p-0 text-secondary" (click)="SendReminderEmail(appointment)" title="Resend Reminder">

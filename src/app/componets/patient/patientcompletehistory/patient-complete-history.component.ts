@@ -6,10 +6,11 @@ import { DataService } from '../../../services/data.service';
 import { Patient } from '../../../models/patient.model';
 import { PatientService } from '../../../services/patient.service';
 import { User } from '../../../models/user.model';
+import { AppDatePipe } from '../../../common/app-date.pipe';
 
 @Component({
   selector: 'app-patientcompletehistory',
-  imports: [FormsModule],
+  imports: [FormsModule, AppDatePipe],
   templateUrl: './patient-complete-history.component.html',
   styleUrls: ['./patient-complete-history.component.css'],
   standalone: true,

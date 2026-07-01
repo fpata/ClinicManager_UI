@@ -166,7 +166,7 @@
                       }
                     </div>
                   </td>
-                  <td class="align-middle">{{treatmentdetail.TreatmentDate}}</td>
+                  <td class="align-middle">{{treatmentdetail.TreatmentDate | appDate}}</td>
                   <td class="align-middle">{{treatmentdetail.Tooth}}</td>
                   <td class="align-middle">{{treatmentdetail.Procedure}}</td>
                   <td class="align-middle">{{treatmentdetail.Prescription}}</td>
@@ -197,7 +197,7 @@
               <div class="d-flex justify-content-between align-items-start">
                 <div>
                   <h6 class="mb-1">{{treatmentdetail.Procedure}}</h6>
-                  <span class="badge bg-info">Date: {{treatmentdetail.TreatmentDate}}</span>
+                  <span class="badge bg-info">Date: {{treatmentdetail.TreatmentDate | appDate}}</span>
                 </div>
                 <div class="action-buttons-mobile d-flex gap-1">
                   @if (!isPatientRole) {

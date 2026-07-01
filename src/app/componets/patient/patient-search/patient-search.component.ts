@@ -13,11 +13,12 @@ import { Router } from '@angular/router';
 import { UtilityService } from '../../../services/utility.service';
 import { MessageService } from '../../../services/message.service';
 import { PagingComponent } from "../../../common/paging/paging.component";
+import { AppDatePipe } from '../../../common/app-date.pipe';
 
 @Component({
   selector: 'app-patient-search',
   standalone: true,
-  imports: [CommonModule, FormsModule, PagingComponent],
+  imports: [CommonModule, FormsModule, PagingComponent, AppDatePipe],
   templateUrl: './patient-search.component.html',
   styleUrls: ['./patient-search.component.css'],
   providers: [HttpClient],

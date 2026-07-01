@@ -16,10 +16,11 @@ import { UserType } from '../../../models/user.model';
 import { PagingComponent } from '../../../common/paging/paging.component';
 import { AppConfigService } from '../../../services/config.service';
 import { DatePipe } from '@angular/common';
+import { AppDatePipe } from '../../../common/app-date.pipe';
 
 @Component({
   selector: 'app-doctor-appointments',
-  imports: [SchedulerComponent, FormsModule, TypeaheadComponent, PagingComponent, DatePipe],
+  imports: [SchedulerComponent, FormsModule, TypeaheadComponent, PagingComponent, DatePipe, AppDatePipe],
   templateUrl: './doctorappointments.component.html',
   styleUrls: ['./doctorappointments.component.css'],
   providers: [HttpClient],

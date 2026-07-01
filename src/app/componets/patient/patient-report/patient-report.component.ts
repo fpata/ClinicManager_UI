@@ -16,10 +16,11 @@ import { PatientReportService } from '../../../services/patient-report.service';
 import { PatientService } from '../../../services/patient.service';
 import { PatientBaseComponent } from '../patient-base.component';
 import { UserService } from '../../../services/user.service';
+import { AppDatePipe } from '../../../common/app-date.pipe';
 
 @Component({
   selector: 'app-patient-report',
-  imports: [FormsModule, FileUploadComponent, TypeaheadComponent],
+  imports: [FormsModule, FileUploadComponent, TypeaheadComponent, AppDatePipe],
   templateUrl: './patient-report.component.html',
   styleUrls: ['./patient-report.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

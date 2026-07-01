@@ -11,10 +11,11 @@ import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/user.model';
 import { PatientBaseComponent } from '../patient-base.component';
 import { UserService } from '../../../services/user.service';
+import { AppDatePipe } from '../../../common/app-date.pipe';
 
 @Component({
   selector: 'app-patient-vitals',
-  imports: [FormsModule],
+  imports: [FormsModule, AppDatePipe],
   templateUrl: './patient-vitals.component.html',
   styleUrls: ['./patient-vitals.component.css'],
   standalone: true,

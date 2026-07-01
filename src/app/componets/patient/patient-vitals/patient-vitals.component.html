@@ -212,7 +212,7 @@
                                     <td>{{vital?.SugarPostPrandial}}</td>
                                     <td>{{vital?.SugarRandom}}</td>
                                     <td>{{vital?.Notes}}</td>
-                                    <td>{{vital?.RecordedDate}}</td>
+                                    <td>{{vital?.RecordedDate | appDate}}</td>
                                     <td>{{vital?.RecordedBy}}</td>
                                 </tr>
                                 }
@@ -240,7 +240,7 @@
                                                         <br> Respiration Rate : {{vital.RespiratoryRate}}
                                                         <br> Oxygen Saturation : {{vital.OxygenSaturation}}
                                                         <br> Blood Type: {{vital.BloodType}}
-                                                        <br> Recorded Date: {{vital.RecordedDate}}
+                                                        <br> Recorded Date: {{vital.RecordedDate | appDate}}
                                                         <br> Sugar Fasting: {{vital.SugarFasting}}
                                                         <br> Sugar Post Prandial: {{vital.SugarPostPrandial}}
                                                         <br> Sugar Random: {{vital.SugarRandom}}

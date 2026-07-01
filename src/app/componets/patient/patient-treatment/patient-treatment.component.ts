@@ -14,10 +14,11 @@ import { User } from '../../../models/user.model';
 import { UserService } from '../../../services/user.service';
 import { PatientTreatmentService } from '../../../services/patient-treatment.service';
 import { PrintService } from '../../../services/print.service';
+import { AppDatePipe } from '../../../common/app-date.pipe';
 
 @Component({
   selector: 'app-patient-treatment',
-  imports: [FormsModule],
+  imports: [FormsModule, AppDatePipe],
   templateUrl: './patient-treatment.component.html',
   styleUrls: ['./patient-treatment.component.css'],
   standalone: true,

@@ -35,7 +35,7 @@
           <td>{{treatment.ChiefComplaint}}</td>
           <td>{{treatment.ClinicalFindings}}</td>
           <td>{{treatment.TreatmentPlan}}</td>
-          <td>{{treatment.TreatmentDate}}</td>
+          <td>{{treatment.TreatmentDate | appDate}}</td>
         </tr>
        }
        @if (patientTreatments != undefined && patientTreatments.length == 0 ){
